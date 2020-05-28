@@ -1,4 +1,4 @@
-package com.fmning.authentication;
+package com.fmning.sso;
 
 import lombok.Builder;
 import lombok.Data;

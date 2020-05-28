@@ -1,4 +1,4 @@
-package com.fmning.authentication;
+package com.fmning.sso;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.fmning.authentication;
+package com.fmning.sso;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

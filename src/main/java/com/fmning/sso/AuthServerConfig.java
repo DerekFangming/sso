@@ -1,7 +1,6 @@
-package com.fmning.authentication;
+package com.fmning.sso;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +21,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
     private String publicKey = System.getenv("SSO_OAUTH_PUBLIC_KEY");
 
     @Autowired
-    @Qualifier("authenticationManagerBean")
+//    @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Autowired

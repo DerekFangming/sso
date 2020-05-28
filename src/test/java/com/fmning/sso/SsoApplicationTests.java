@@ -1,10 +1,10 @@
-package com.fmning.authentication;
+package com.fmning.sso;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthenticationApplicationTests {
+class SsoApplicationTests {
 
 	@Test
 	void contextLoads() {

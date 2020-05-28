@@ -1,4 +1,4 @@
-package com.fmning.authentication;
+package com.fmning.sso;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
