@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @Builder
 @Data
-public class UserEntity {
+public class User {
     private String username;
     private String password;
     @Builder.Default

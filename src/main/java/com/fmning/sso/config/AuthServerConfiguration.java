@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
-public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private String clientid = "tutorialspoint";
     private String clientSecret = "my-secret-key";

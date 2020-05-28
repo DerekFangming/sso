@@ -1,6 +1,6 @@
 package com.fmning.sso.config;
 
-import com.fmning.sso.service.CustomUserDetailsService;
+import com.fmning.sso.service.SsoUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomUserDetailsService customDetailsService;
+    private SsoUserDetailsService customDetailsService;
 
     @Bean
     public PasswordEncoder encoder() {

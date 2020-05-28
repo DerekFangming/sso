@@ -1,6 +1,6 @@
 package com.fmning.sso.service;
 
-import com.fmning.sso.domain.CustomUser;
+import com.fmning.sso.domain.SsoUser;
 import com.fmning.sso.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor(onConstructor_={@Autowired})
-public class CustomUserDetailsService implements UserDetailsService {
+public class SsoUserDetailsService implements UserDetailsService {
 
     private final UserRepo userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new CustomUser(userRepo.get(username));
+        return new SsoUser(userRepo.get(username));
     }
 }
