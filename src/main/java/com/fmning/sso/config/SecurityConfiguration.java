@@ -1,5 +1,6 @@
-package com.fmning.sso;
+package com.fmning.sso.config;
 
+import com.fmning.sso.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

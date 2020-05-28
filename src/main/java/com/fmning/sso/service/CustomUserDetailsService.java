@@ -1,5 +1,7 @@
-package com.fmning.sso;
+package com.fmning.sso.service;
 
+import com.fmning.sso.domain.CustomUser;
+import com.fmning.sso.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

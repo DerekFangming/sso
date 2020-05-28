@@ -1,5 +1,6 @@
-package com.fmning.sso;
+package com.fmning.sso.domain;
 
+import com.fmning.sso.domain.UserEntity;
 import org.springframework.security.core.userdetails.User;
 
 public class CustomUser extends User {

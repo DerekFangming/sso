@@ -1,4 +1,4 @@
-package com.fmning.sso;
+package com.fmning.sso.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

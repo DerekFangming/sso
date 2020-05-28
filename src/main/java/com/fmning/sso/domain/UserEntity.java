@@ -1,4 +1,4 @@
-package com.fmning.sso;
+package com.fmning.sso.domain;
 
 import lombok.Builder;
 import lombok.Data;

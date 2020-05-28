@@ -1,4 +1,4 @@
-package com.fmning.sso;
+package com.fmning.sso.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

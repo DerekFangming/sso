@@ -1,5 +1,6 @@
-package com.fmning.sso;
+package com.fmning.sso.repository;
 
+import com.fmning.sso.domain.UserEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Repository;
 
