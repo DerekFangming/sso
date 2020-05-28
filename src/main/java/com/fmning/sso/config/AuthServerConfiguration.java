@@ -1,5 +1,6 @@
 package com.fmning.sso.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
+@RequiredArgsConstructor(onConstructor_={@Autowired})
 public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private String clientid = "tutorialspoint";
@@ -20,12 +22,8 @@ public class AuthServerConfiguration extends AuthorizationServerConfigurerAdapte
     private String privateKey = System.getenv("SSO_OAUTH_PRIVATE_KEY");
     private String publicKey = System.getenv("SSO_OAUTH_PUBLIC_KEY");
 
-    @Autowired
-//    @Qualifier("authenticationManagerBean")
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public JwtAccessTokenConverter tokenEnhancer() {
