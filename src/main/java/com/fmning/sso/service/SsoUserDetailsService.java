@@ -1,6 +1,7 @@
 package com.fmning.sso.service;
 
 import com.fmning.sso.domain.SsoUser;
+import com.fmning.sso.domain.User;
 import com.fmning.sso.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ public class SsoUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new SsoUser(userRepo.get(username));
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + username + " not found");
+        } else {
+            return new SsoUser(user);
+        }
     }
 }
