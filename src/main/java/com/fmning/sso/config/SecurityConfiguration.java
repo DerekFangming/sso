@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -32,9 +33,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated()
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(new AppEntryPoint("/login"))
                 .and()
-                .formLogin().loginPage("/login").permitAll();
+                .authorizeRequests()
+                .antMatchers("/login", "/favicon.ico").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .failureHandler(customAuthenticationFailureHandler());
+//                .failureUrl("/login?error=loginError");
+//                .loginPage("/login").permitAll();
     }
 
 //    @Override
@@ -45,5 +55,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 }

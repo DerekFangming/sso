@@ -1,18 +1,51 @@
 <html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--        <script>-->
+<!--            function formInterceptor() {-->
+<!--                var $form = $("signupForm");-->
+<!--                console.log(1);-->
+<!--                console.log($form);-->
+
+<!--                $form.on('submit', function(e) {-->
+<!--                    console.log(2);-->
+<!--                    e.preventDefault();-->
+
+<!--                    console.log($form.serialize());-->
+<!--                    $.ajax({-->
+<!--                        url : $form.attr('action'),-->
+<!--                        type : 'post',-->
+<!--                        data : $form.serialize(),-->
+<!--                        success : function(response) {-->
+<!--                            if ($(response).find('.has-error').length) {-->
+<!--                                $form.replaceWith(response);-->
+<!--                            }-->
+<!--                            else{-->
+<!--                                $("#ajaxLoadedContent").replaceWith(response);-->
+<!--                            }-->
+<!--                        }-->
+<!--                    });-->
+<!--                });-->
+<!--            };-->
+<!--        </script>-->
+<!--        <script>formInterceptor();</script>-->
+    </head>
     <body>
     <div class="container">
         <h1>SignUp !</h1>
+        <p th:text="${params}">Text ...</p>
+        <p th:text="${param.client_id}">Test</p>
         <div class="col-md-6">
             <div class="row">
                 <p><a href="/oauth2/authorize/google"><img src="http://pngimg.com/uploads/google/google_PNG19635.png" style="height:60px"></a></p>
             </div>
             <div class="row">
                 <h4>OR</h4>
-                <div th:if="${param.error}">
+                <div th:if="${param.prompt}">
                     Invalid username or password
                 </div>
                 <div class="row">
-                    <form th:action="@{/login}" method="post" name="signup">
+                    <form th:action="${params}" method="post" name="signup" id="signupForm">
                         <div class="form-group">
                             <label for="username">Username:</label>
                             <input type="text" class="form-control" id="username" name="username">
@@ -26,7 +59,47 @@
 <!--                            <input type="password" class="form-control" id="pwd" name="password">-->
 <!--                        </div>-->
                         <button type="submit" class="btn btn-primary">Login</button>
+                        <button id="loginBtn" class="btn btn-primary">Login1</button>
                     </form>
+                    <script type='text/javascript'>
+                        /* attach a submit handler to the form */
+<!--                        $("#signupForm").submit(function(event) {-->
+                        $("#loginBtn").click(function(event) {
+
+                          /* stop form from submitting normally */
+                          event.preventDefault();
+
+                          console.log(1);
+<!--                          console.log(event.currentTarget);-->
+<!--                          console.log(event);-->
+<!--                          console.log(event.target.action);-->
+<!--                          console.log($(this).serialize());-->
+
+                          /* get the action attribute from the <form action=""> element */
+                          var $form = $("#signupForm");
+
+                          /* Send the data using post with element id name and name2*/
+                          $.ajax({
+                                url : $form.attr('action'),
+                                type : 'post',
+                                data : $form.serialize(),
+                                success : function(data, textStatus) {
+                                    console.log(textStatus);
+                                    if (data.redirect) {
+                                        console.log("red");
+                                        console.log(data.redirect);
+                                    } else {
+                                        console.log("data");
+                                        console.log(data);
+                                    }
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log("Error state!");
+                                   console.log(textStatus, errorThrown);
+                                }
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>
