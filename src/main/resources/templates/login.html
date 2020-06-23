@@ -1,6 +1,6 @@
 <html xmlns:th="https://www.thymeleaf.org">
     <head>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
 <!--        <script>-->
 <!--            function formInterceptor() {-->
 <!--                var $form = $("signupForm");-->
@@ -59,47 +59,8 @@
 <!--                            <input type="password" class="form-control" id="pwd" name="password">-->
 <!--                        </div>-->
                         <button type="submit" class="btn btn-primary">Login</button>
-                        <button id="loginBtn" class="btn btn-primary">Login1</button>
+<!--                        <button id="loginBtn" class="btn btn-primary">Login1</button>-->
                     </form>
-                    <script type='text/javascript'>
-                        /* attach a submit handler to the form */
-<!--                        $("#signupForm").submit(function(event) {-->
-                        $("#loginBtn").click(function(event) {
-
-                          /* stop form from submitting normally */
-                          event.preventDefault();
-
-                          console.log(1);
-<!--                          console.log(event.currentTarget);-->
-<!--                          console.log(event);-->
-<!--                          console.log(event.target.action);-->
-<!--                          console.log($(this).serialize());-->
-
-                          /* get the action attribute from the <form action=""> element */
-                          var $form = $("#signupForm");
-
-                          /* Send the data using post with element id name and name2*/
-                          $.ajax({
-                                url : $form.attr('action'),
-                                type : 'post',
-                                data : $form.serialize(),
-                                success : function(data, textStatus) {
-                                    console.log(textStatus);
-                                    if (data.redirect) {
-                                        console.log("red");
-                                        console.log(data.redirect);
-                                    } else {
-                                        console.log("data");
-                                        console.log(data);
-                                    }
-                                },
-                                error: function(jqXHR, textStatus, errorThrown) {
-                                    console.log("Error state!");
-                                   console.log(textStatus, errorThrown);
-                                }
-                            });
-                        });
-                    </script>
                 </div>
             </div>
         </div>

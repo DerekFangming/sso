@@ -1,11 +1,9 @@
 package com.fmning.sso.config;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.UrlUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,28 +11,16 @@ import java.io.IOException;
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException exception)
-            throws IOException, ServletException {
-
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//        Map<String, Object> data = new HashMap<>();
-//        data.put(
-//                "timestamp",
-//                Calendar.getInstance().getTime());
-//        data.put(
-//                "exception",
-//                exception.getMessage());
-
-        String query = request.getQueryString();
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         String continueParamValue = UrlUtils.buildRequestUrl(request);
 
-        if (!continueParamValue.contains("prompt")) {
-            continueParamValue += "&prompt=error";
+        if (request.getParameter("prompt") == null) {
+            if (request.getQueryString() == null) {
+                continueParamValue += "?prompt=error";
+            } else {
+                continueParamValue += "&prompt=error";
+            }
         }
         response.sendRedirect(continueParamValue);
-//        response.getOutputStream()
-//                .println(query);
     }
 }

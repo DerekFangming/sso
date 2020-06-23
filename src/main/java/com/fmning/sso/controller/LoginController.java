@@ -25,9 +25,9 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/login1")
-    public String login1() {
-        return "login1111111";
+    @GetMapping("/")
+    public String dashboard() {
+        return "dashboard";
     }
 
 }
