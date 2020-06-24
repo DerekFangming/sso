@@ -1,69 +1,43 @@
-<html xmlns:th="https://www.thymeleaf.org">
-    <head>
-<!--        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
-<!--        <script>-->
-<!--            function formInterceptor() {-->
-<!--                var $form = $("signupForm");-->
-<!--                console.log(1);-->
-<!--                console.log($form);-->
-
-<!--                $form.on('submit', function(e) {-->
-<!--                    console.log(2);-->
-<!--                    e.preventDefault();-->
-
-<!--                    console.log($form.serialize());-->
-<!--                    $.ajax({-->
-<!--                        url : $form.attr('action'),-->
-<!--                        type : 'post',-->
-<!--                        data : $form.serialize(),-->
-<!--                        success : function(response) {-->
-<!--                            if ($(response).find('.has-error').length) {-->
-<!--                                $form.replaceWith(response);-->
-<!--                            }-->
-<!--                            else{-->
-<!--                                $("#ajaxLoadedContent").replaceWith(response);-->
-<!--                            }-->
-<!--                        }-->
-<!--                    });-->
-<!--                });-->
-<!--            };-->
-<!--        </script>-->
-<!--        <script>formInterceptor();</script>-->
-    </head>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  </head>
     <body>
-    <div class="container">
-        <h1>SignUp !</h1>
-        <p th:text="${params}">Text ...</p>
-        <p th:text="${param.client_id}">Test</p>
-        <div class="col-md-6">
-            <div class="row">
-                <p><a href="/oauth2/authorize/google"><img src="http://pngimg.com/uploads/google/google_PNG19635.png" style="height:60px"></a></p>
-            </div>
-            <div class="row">
-                <h4>OR</h4>
-                <div th:if="${param.prompt}">
-                    Invalid username or password
-                </div>
-                <div class="row">
-                    <form th:action="${params}" method="post" name="signup" id="signupForm">
-                        <div class="form-group">
-                            <label for="username">Username:</label>
-                            <input type="text" class="form-control" id="username" name="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input type="text" class="form-control" id="password" name="password">
-                        </div>
-<!--                        <div class="form-group">-->
-<!--                            <label for="pwd">Password:</label>-->
-<!--                            <input type="password" class="form-control" id="pwd" name="password">-->
-<!--                        </div>-->
-                        <button type="submit" class="btn btn-primary">Login</button>
-<!--                        <button id="loginBtn" class="btn btn-primary">Login1</button>-->
-                    </form>
-                </div>
-            </div>
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <div class="container">
+          <a class="navbar-brand">Fm.ning</a>
         </div>
-    </div>
-    </body>
+      </nav>
+
+      <div class="container">
+        <div class="row my-4">
+          <div class="col text-center mt-4">
+            <p class="lead">Log in with your email</p>
+          </div>
+        </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-6">
+            <form th:action="${params}" method="post" name="signup">
+              <div th:if="${param.prompt}" class="alert alert-danger" role="alert">
+                This is a danger alert—check it out!
+              </div>
+              <div class="form-group my-3">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username (email)">
+              </div>
+              <div class="form-group my-3">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block my-4">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+  </body>
 </html>
