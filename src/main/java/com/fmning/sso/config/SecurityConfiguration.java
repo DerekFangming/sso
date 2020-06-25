@@ -42,7 +42,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .failureHandler(customAuthenticationFailureHandler());
+                .failureHandler(customAuthenticationFailureHandler())
+//                .and()
+//                .logout().deleteCookies("JSESSIONID")
+//                .and()
+//                .csrf()
+                .and()
+                .rememberMe()
+                .tokenValiditySeconds(86400);
 //                .failureUrl("/login?error=loginError");
 //                .loginPage("/login").permitAll();
     }
