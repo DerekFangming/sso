@@ -36,20 +36,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .exceptionHandling()
                 .authenticationEntryPoint(new AppEntryPoint("/login"))
-                .and()
+            .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/favicon.ico").permitAll()
+                .antMatchers("/login", "/logout", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
-                .and()
+            .and()
                 .formLogin()
                 .failureHandler(customAuthenticationFailureHandler())
 //                .and()
 //                .logout().deleteCookies("JSESSIONID")
 //                .and()
 //                .csrf()
-                .and()
+            .and()
                 .rememberMe()
-                .tokenValiditySeconds(86400);
+                .tokenValiditySeconds(604800)
+            .and()
+                .logout()
+//                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?prompt=logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
 //                .failureUrl("/login?error=loginError");
 //                .loginPage("/login").permitAll();
     }

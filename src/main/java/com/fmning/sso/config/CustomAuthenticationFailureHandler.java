@@ -1,5 +1,6 @@
 package com.fmning.sso.config;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.UrlUtils;
@@ -14,12 +15,20 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         String continueParamValue = UrlUtils.buildRequestUrl(request);
 
+        String prompt = "error";
+        if (exception instanceof DisabledException) {
+            prompt = "disabled";
+        }
+
         if (request.getParameter("prompt") == null) {
             if (request.getQueryString() == null) {
-                continueParamValue += "?prompt=error";
+                continueParamValue += "?prompt=" + prompt;
             } else {
-                continueParamValue += "&prompt=error";
+                continueParamValue += "&prompt=" + prompt;
             }
+        } else {
+            continueParamValue = continueParamValue.replace("prompt=" + request.getParameter("prompt"),
+                    "prompt=" + prompt);
         }
         response.sendRedirect(continueParamValue);
     }
