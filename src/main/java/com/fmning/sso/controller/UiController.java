@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Controller
-public class LoginController {
+public class UiController {
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, Model model) {
