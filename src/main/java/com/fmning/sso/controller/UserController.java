@@ -10,7 +10,7 @@ import java.security.Principal;
 @RestController
 public class UserController {
 
-    @RequestMapping("/me")
+    @RequestMapping("/user")
     public Principal me(Principal principal) {
         SecurityContext sc = SecurityContextHolder.getContext();
         return principal;
