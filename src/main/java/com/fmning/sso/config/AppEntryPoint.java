@@ -20,7 +20,6 @@ public class AppEntryPoint extends LoginUrlAuthenticationEntryPoint {
         String continueParamValue = UrlUtils.buildRequestUrl(request);
         String query = request.getQueryString();
         String redirect = super.determineUrlToUseForThisRequest(request, response, exception);
-//        return UriComponentsBuilder.fromPath(redirect).queryParam("app", continueParamValue).toUriString();
         return UriComponentsBuilder.fromPath(redirect).query(query).toUriString();
     }
 

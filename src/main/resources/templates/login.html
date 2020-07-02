@@ -12,6 +12,15 @@
         transform: scale(1.5);
       }
     </style>
+
+    <script>
+      $(document).ready(function(){
+        $('#loginBtn').click(function(){
+          console.log(1);
+          //$(this).attr("disabled", true);
+        });
+      });
+    </script>
   </head>
     <body>
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -54,11 +63,11 @@
                     <input type="checkbox" class="ml-2 mt-3" name="remember-me" /> <span class="ml-2 mt-1">Remember me</span>
                   </div>
                   <div class="col">
-                    <button type="button" class="btn btn-link float-right">Problems signing in?</button>
+                    <a type="button" href="/reset-password" class="btn btn-link float-right">Problems signing in?</a>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary btn-block my-4">Log in</button>
+              <button id="loginBtn" type="submit" class="btn btn-primary btn-block my-4">Log in</button>
             </form>
           </div>
         </div>

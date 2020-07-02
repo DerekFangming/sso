@@ -15,6 +15,11 @@ import java.security.Principal;
 @Controller
 public class UiController {
 
+    @GetMapping("/")
+    public String dashboard() {
+        return "dashboard";
+    }
+
     @GetMapping("/login")
     public String login(HttpServletRequest request, Model model) {
 //        System.out.println("============ " + app);
@@ -25,9 +30,9 @@ public class UiController {
         return "login";
     }
 
-    @GetMapping("/")
-    public String dashboard() {
-        return "dashboard";
+    @GetMapping("/reset-password")
+    public String resetPassword() {
+        return "reset";
     }
 
 }

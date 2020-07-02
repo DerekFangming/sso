@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#recoveryBtn').click(function() {
+          $(this).attr('disabled', true);
+          $.ajax({
+            url: '/send-recovery-email',
+            type: 'POST',
+            data: JSON.stringify({'username': $('#username').val()}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              $('#recoveryBtn').attr('disabled', false);
+              $('#recoverySection').addClass('d-none');
+              $('#resetSection').removeClass('d-none');
+            },
+            error: function(request, error) {
+              $('#recoveryBtn').attr('disabled', false);
+              $('#recoveryBtn').attr('disabled', false);
+              $('#alertMsg').html('The username is not found.');
+              $('#alertMsg').removeClass('d-none');
+            }
+          });
+        });
+
+        $('#btn1').click(function() {
+          $('#recoverySection').addClass('d-none');
+          $('#resetSection').removeClass('d-none');
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+        <a class="navbar-brand">Fm.ning</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row my-4">
+        <div class="col text-center mt-4">
+          <button id="btn1" class="btn btn-primary btn-block my-4">btn1</button>
+          <button id="btn2" class="btn btn-primary btn-block my-4">btn2</button>
+          <p class="lead">Password reset</p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center my-3">
+        <div class="col-6">
+
+          <div id="alertMsg" class="alert alert-danger mb-3 d-none" role="alert"></div>
+
+          <div id="recoverySection">
+            <div class="form-group my-3">
+              <label>Enter your username (email)</label>
+              <input type="text" class="form-control" style="height:50px;" id="username" name="username" placeholder="Username (email)">
+            </div>
+            <button id="recoveryBtn" class="btn btn-primary btn-block my-4">Send recovery email</button>
+          </div>
+
+          <div id="resetSection" class="d-none">
+            <div class="form-group my-3">
+              <label>Enter the recovery code sent to your email</label>
+              <input type="text" class="form-control" style="height:50px;" id="code" name="username" placeholder="Recovery code">
+            </div>
+            <div class="form-group my-3">
+              <label>New password</label>
+              <input type="password" class="form-control" style="height:50px;" id="password" name="password" placeholder="New password">
+            </div>
+            <div class="form-group my-3">
+              <label>Confirm new password</label>
+              <input type="password" class="form-control" style="height:50px;" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password">
+            </div>
+            <button id="resetBtn" class="btn btn-primary btn-block my-4">Reset password</button>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

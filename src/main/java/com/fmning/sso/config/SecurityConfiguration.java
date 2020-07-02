@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -43,27 +44,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .failureHandler(customAuthenticationFailureHandler())
-//                .and()
-//                .logout().deleteCookies("JSESSIONID")
-//                .and()
-//                .csrf()
             .and()
                 .rememberMe()
                 .tokenValiditySeconds(604800)
             .and()
                 .logout()
-//                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?prompt=logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
-//                .failureUrl("/login?error=loginError");
-//                .loginPage("/login").permitAll();
     }
 
-//    @Override
-//    public void configure(WebSecurity web) throws Exception {
-//        web.ignoring();
-//    }
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/reset-password", "/send-recovery-email");
+    }
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
