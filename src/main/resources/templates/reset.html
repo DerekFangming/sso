@@ -18,12 +18,12 @@
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
+              $('#alertMsg').addClass('d-none');
               $('#recoveryBtn').attr('disabled', false);
               $('#recoverySection').addClass('d-none');
               $('#resetSection').removeClass('d-none');
             },
             error: function(request, error) {
-              $('#recoveryBtn').attr('disabled', false);
               $('#recoveryBtn').attr('disabled', false);
               $('#alertMsg').html('The username is not found.');
               $('#alertMsg').removeClass('d-none');
@@ -31,9 +31,41 @@
           });
         });
 
-        $('#btn1').click(function() {
-          $('#recoverySection').addClass('d-none');
-          $('#resetSection').removeClass('d-none');
+        $('#resetBtn').click(function() {
+          console.log(1);
+          if ($('#password').val() != $('#confirmPassword').val()) {
+            $('#alertMsg').html('The two passwords you entered does not match.');
+            $('#alertMsg').removeClass('d-none');
+            return;
+          } else if ($('#password').val().length < 6) {
+            $('#alertMsg').html('New passwords needs to be at least 6 characters.');
+            $('#alertMsg').removeClass('d-none');
+            return;
+          }
+
+          $('#alertMsg').addClass('d-none');
+          $(this).attr('disabled', true);
+
+          $.ajax({
+            url: '/reset-password',
+            type: 'POST',
+            data: JSON.stringify({'passwordResetCode': $('#passwordResetCode').val(), 'username': $('#username').val(), 'password': $('#password').val()}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              window.location.href = '/login?prompt=reset';
+            },
+            error: function(xhr, textStatus) {
+              $('#resetBtn').attr('disabled', false);
+              if (xhr.status == 400) {
+                $('#alertMsg').html('Bad format.');
+                $('#alertMsg').removeClass('d-none');
+              } else if (xhr.status == 401) {
+                $('#alertMsg').html('The recovery code does not match our record.');
+                $('#alertMsg').removeClass('d-none');
+              }
+            }
+          });
         });
 
       });
@@ -49,8 +81,6 @@
     <div class="container">
       <div class="row my-4">
         <div class="col text-center mt-4">
-          <button id="btn1" class="btn btn-primary btn-block my-4">btn1</button>
-          <button id="btn2" class="btn btn-primary btn-block my-4">btn2</button>
           <p class="lead">Password reset</p>
         </div>
       </div>
@@ -71,7 +101,7 @@
           <div id="resetSection" class="d-none">
             <div class="form-group my-3">
               <label>Enter the recovery code sent to your email</label>
-              <input type="text" class="form-control" style="height:50px;" id="code" name="username" placeholder="Recovery code">
+              <input type="text" class="form-control" style="height:50px;" id="passwordResetCode" name="passwordResetCode" placeholder="Recovery code">
             </div>
             <div class="form-group my-3">
               <label>New password</label>
@@ -83,8 +113,6 @@
             </div>
             <button id="resetBtn" class="btn btn-primary btn-block my-4">Reset password</button>
           </div>
-
-
 
         </div>
       </div>

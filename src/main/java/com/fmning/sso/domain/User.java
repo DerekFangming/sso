@@ -41,6 +41,9 @@ public class User {
     @Column(name="confirm_code")
     private String confirmCode;
 
+    @Column(name="password_reset_code")
+    private String passwordResetCode;
+
     @Column(name="created_at")
     private Instant createdAt;
 
