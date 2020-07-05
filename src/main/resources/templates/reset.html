@@ -12,7 +12,7 @@
         $('#recoveryBtn').click(function() {
           $(this).attr('disabled', true);
           $.ajax({
-            url: '/send-recovery-email',
+            url: '/sso/send-recovery-email',
             type: 'POST',
             data: JSON.stringify({'username': $('#username').val()}),
             contentType: "application/json; charset=utf-8",
@@ -32,7 +32,6 @@
         });
 
         $('#resetBtn').click(function() {
-          console.log(1);
           if ($('#password').val() != $('#confirmPassword').val()) {
             $('#alertMsg').html('The two passwords you entered does not match.');
             $('#alertMsg').removeClass('d-none');
@@ -47,13 +46,13 @@
           $(this).attr('disabled', true);
 
           $.ajax({
-            url: '/reset-password',
+            url: '/sso/reset-password',
             type: 'POST',
             data: JSON.stringify({'passwordResetCode': $('#passwordResetCode').val(), 'username': $('#username').val(), 'password': $('#password').val()}),
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
-              window.location.href = '/login?prompt=reset';
+              window.location.href = '/sso/login?prompt=reset';
             },
             error: function(xhr, textStatus) {
               $('#resetBtn').attr('disabled', false);

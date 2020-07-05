@@ -52,10 +52,7 @@ public class UserController {
         } else if (StringUtils.isEmpty(passwordResetDto.getPassword()) || passwordResetDto.getPassword().length() < 6) {
             return ResponseEntity.badRequest().body(passwordResetDto);
         } else {
-//            user.setPasswordResetCode(RandomStringUtils.randomAlphanumeric(6).toUpperCase());
-//            System.out.println(user.getPasswordResetCode());
-//            userRepo.save(user);
-
+            user.setPasswordResetCode(null);
             user.setPassword(passwordEncoder.encode(passwordResetDto.getPassword()));
             userRepo.save(user);
             return ResponseEntity.ok(passwordResetDto);
