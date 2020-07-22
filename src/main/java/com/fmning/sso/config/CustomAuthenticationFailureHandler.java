@@ -5,11 +5,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.UrlUtils;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+
+    ServletContext servletContext;
+
+    public CustomAuthenticationFailureHandler(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
@@ -30,6 +37,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             continueParamValue = continueParamValue.replace("prompt=" + request.getParameter("prompt"),
                     "prompt=" + prompt);
         }
-        response.sendRedirect(continueParamValue);
+        response.sendRedirect(servletContext.getContextPath() + continueParamValue);
     }
 }

@@ -15,11 +15,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
+import javax.servlet.ServletContext;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor(onConstructor_={@Autowired})
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final ServletContext servletContext;
     private final SsoUserDetailsService customDetailsService;
 
     @Bean
@@ -68,6 +71,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler();
+        return new CustomAuthenticationFailureHandler(servletContext);
     }
 }
