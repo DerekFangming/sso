@@ -29,6 +29,7 @@ public class SsoClientDetailsService implements ClientDetailsService {
         baseClientDetails.setClientSecret(clientDetail.getClientSecret());
         baseClientDetails.setAccessTokenValiditySeconds(clientDetail.getAccessTokenValiditySeconds());
         baseClientDetails.setRefreshTokenValiditySeconds(clientDetail.getRefreshTokenValiditySeconds());
+        baseClientDetails.setAutoApproveScopes(baseClientDetails.getScope());
 
         return baseClientDetails;
     }
