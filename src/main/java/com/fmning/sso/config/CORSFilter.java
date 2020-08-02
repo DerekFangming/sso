@@ -16,8 +16,6 @@ public class CORSFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {}
 
-    public void destroy() {}
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
@@ -35,8 +33,5 @@ public class CORSFilter implements Filter {
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
-
-
     }
-
 }
