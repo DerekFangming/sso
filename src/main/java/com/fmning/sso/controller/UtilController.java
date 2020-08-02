@@ -2,6 +2,9 @@ package com.fmning.sso.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,4 +18,24 @@ public class UtilController {
     public String encodePassword(@PathVariable("password") String password) {
          return passwordEncoder.encode(password);
     }
+
+    @GetMapping("/ping1")
+    public String ping1() {
+        SecurityContext sc = SecurityContextHolder.getContext();
+        return "ok";
+    }
+
+    @GetMapping("/ping2")
+    @PreAuthorize("hasRole('SSO')")
+    public String ping2() {
+        return "ok";
+    }
+
+    @GetMapping("/ping3")
+    @PreAuthorize("hasRole('USER')")
+    public String ping3() {
+        return "ok";
+    }
+
+
 }
