@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -28,6 +29,16 @@ public class UiController {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         String clientId = request.getParameter("client_id");
         return "login";
+    }
+
+    @GetMapping("/login1")
+    public ModelAndView  login() {
+        return new ModelAndView("redirect:/login");
+    }
+
+    @GetMapping("/sso/login")
+    public ModelAndView  loginSso() {
+        return new ModelAndView("redirect:/login");
     }
 
     @GetMapping("/reset-password")
