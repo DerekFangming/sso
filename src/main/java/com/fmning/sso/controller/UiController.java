@@ -1,5 +1,7 @@
 package com.fmning.sso.controller;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.UrlUtils;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Controller
@@ -37,8 +40,10 @@ public class UiController {
     }
 
     @GetMapping("/sso/login")
-    public ModelAndView  loginSso() {
-        return new ModelAndView("redirect:/login");
+    public void  loginSso(HttpServletRequest request, HttpServletResponse respone) {
+        String url = request.getRequestURL().toString();
+        respone.setHeader(HttpHeaders.LOCATION, url.replace("/sso/login", "/login"));
+        respone.setStatus(HttpStatus.FOUND.value());
     }
 
     @GetMapping("/reset-password")
