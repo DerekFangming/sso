@@ -39,17 +39,17 @@ public class UiController {
         return new ModelAndView("redirect:/login");
     }
 
-//    @GetMapping("/sso/login")
-//    public void  loginSso(HttpServletRequest request, HttpServletResponse respone) {
-//        String url = request.getRequestURL().toString();
-//        respone.setHeader(HttpHeaders.LOCATION, url.replace("/sso/login", "/login"));
-//        respone.setStatus(HttpStatus.FOUND.value());
-//    }
-
     @GetMapping("/sso/login")
-    public String  loginSso(HttpServletRequest request, HttpServletResponse respone) {
+    public void  loginSso(HttpServletRequest request, HttpServletResponse respone) {
         String url = request.getRequestURL().toString();
-        return url;
+        respone.setHeader(HttpHeaders.LOCATION, url.replace("/sso/sso/login", "/login"));
+        respone.setStatus(HttpStatus.FOUND.value());
+    }
+
+    @GetMapping("/sso/login1")
+    public String  loginSso1(HttpServletRequest request, HttpServletResponse respone) {
+        String url = request.getRequestURL().toString();
+        return url.replace("/sso/sso/login", "/login");
     }
 
     @GetMapping("/reset-password")
