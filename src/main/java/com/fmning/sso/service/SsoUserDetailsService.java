@@ -1,8 +1,8 @@
-package com.fmning.authentication.service;
+package com.fmning.sso.service;
 
-import com.fmning.authentication.domain.SsoUser;
-import com.fmning.authentication.domain.User;
-import com.fmning.authentication.repository.UserRepo;
+import com.fmning.sso.domain.SsoUser;
+import com.fmning.sso.domain.User;
+import com.fmning.sso.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

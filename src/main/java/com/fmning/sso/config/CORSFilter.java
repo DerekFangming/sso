@@ -1,4 +1,4 @@
-package com.fmning.authentication.config;
+package com.fmning.sso.config;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

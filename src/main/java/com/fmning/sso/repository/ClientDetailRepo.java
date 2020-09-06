@@ -1,6 +1,6 @@
-package com.fmning.authentication.repository;
+package com.fmning.sso.repository;
 
-import com.fmning.authentication.domain.ClientDetail;
+import com.fmning.sso.domain.ClientDetail;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ClientDetailRepo extends CrudRepository<ClientDetail, String> {

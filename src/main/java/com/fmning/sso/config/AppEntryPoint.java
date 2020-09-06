@@ -1,4 +1,4 @@
-package com.fmning.authentication.config;
+package com.fmning.sso.config;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;

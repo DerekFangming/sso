@@ -1,8 +1,8 @@
-package com.fmning.authentication.controller;
+package com.fmning.sso.controller;
 
-import com.fmning.authentication.domain.User;
-import com.fmning.authentication.dto.PasswordResetDto;
-import com.fmning.authentication.repository.UserRepo;
+import com.fmning.sso.domain.User;
+import com.fmning.sso.dto.PasswordResetDto;
+import com.fmning.sso.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;

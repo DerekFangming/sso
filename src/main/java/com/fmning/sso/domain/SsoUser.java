@@ -1,4 +1,4 @@
-package com.fmning.authentication.domain;
+package com.fmning.sso.domain;
 
 public class SsoUser extends org.springframework.security.core.userdetails.User {
 
