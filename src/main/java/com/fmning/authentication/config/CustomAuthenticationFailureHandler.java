@@ -1,4 +1,4 @@
-package com.fmning.sso.config;
+package com.fmning.authentication.config;
 
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;

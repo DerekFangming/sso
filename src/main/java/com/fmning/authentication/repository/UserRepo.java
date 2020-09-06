@@ -1,6 +1,6 @@
-package com.fmning.sso.repository;
+package com.fmning.authentication.repository;
 
-import com.fmning.sso.domain.User;
+import com.fmning.authentication.domain.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

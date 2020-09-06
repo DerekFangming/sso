@@ -1,4 +1,4 @@
-package com.fmning.sso.dto;
+package com.fmning.authentication.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

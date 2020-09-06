@@ -1,4 +1,4 @@
-package com.fmning.sso.config;
+package com.fmning.authentication.config;
 
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;

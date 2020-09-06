@@ -1,6 +1,6 @@
-package com.fmning.sso.config;
+package com.fmning.authentication.config;
 
-import com.fmning.sso.service.SsoUserDetailsService;
+import com.fmning.authentication.service.SsoUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

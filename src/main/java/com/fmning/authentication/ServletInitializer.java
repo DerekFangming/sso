@@ -1,4 +1,4 @@
-package com.fmning.sso;
+package com.fmning.authentication;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
