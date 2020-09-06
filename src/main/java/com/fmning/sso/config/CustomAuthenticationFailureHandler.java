@@ -37,6 +37,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
             continueParamValue = continueParamValue.replace("prompt=" + request.getParameter("prompt"),
                     "prompt=" + prompt);
         }
-        response.sendRedirect(continueParamValue.replace("/sso", ""));
+        response.sendRedirect(continueParamValue);
     }
 }
