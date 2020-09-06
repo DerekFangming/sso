@@ -39,5 +39,5 @@ test {
 
 war {
 	enabled=true
-	archiveFileName = 'sso.war'
+	archiveFileName = 'authentication.war'
 }
