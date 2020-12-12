@@ -4,12 +4,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 
@@ -22,10 +18,6 @@ public class CORSFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-
-        Map<String, String> headers = Collections.list(((HttpServletRequest)servletRequest).getHeaderNames())
-                .stream()
-                .collect(Collectors.toMap(h -> h, ((HttpServletRequest)servletRequest)::getHeader));
 
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         response.setHeader("Access-Control-Allow-Origin", "*");
