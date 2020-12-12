@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -27,8 +28,8 @@
           </div>
         </div>
         <div class="row justify-content-center my-3">
-          <div class="col-6">
-            <form th:action="'/authentication' + ${params}" method="post" name="signup">
+          <div class="col-md-6 col-sm-12">
+            <form th:action="${contextPath} + ${loginUrl}" method="post" name="signup">
               <div th:switch="${#httpServletRequest.getParameter('prompt')}">
                 <div th:case="'logout'" class="alert alert-success mb-3" role="alert">
                   You have successfully logged out.
@@ -57,12 +58,18 @@
                     <input type="checkbox" class="ml-2 mt-3" name="remember-me" /> <span class="ml-2 mt-1">Remember me</span>
                   </div>
                   <div class="col">
-                    <a type="button" href="/authentication/reset-password" class="btn btn-link float-right">Problems signing in?</a>
+                    <a type="button" th:href="${contextPath} + '/reset-password'" class="btn btn-link float-right">Problems signing in?</a>
                   </div>
                 </div>
               </div>
               <button id="loginBtn" type="submit" class="btn btn-primary btn-block my-4">Log in</button>
             </form>
+          </div>
+        </div>
+        <div class="row justify-content-center my-3">
+          <div class="col-md-6 col-sm-12 text-center">
+            <span class="py-2 my-2">Don't have an account?</span>
+            <a type="button" th:href="${contextPath} + '/register'" class="btn btn-link pt-0">Sign up</a>
           </div>
         </div>
       </div>

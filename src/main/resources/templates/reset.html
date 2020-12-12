@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reset Password</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -12,7 +13,7 @@
         $('#recoveryBtn').click(function() {
           $(this).attr('disabled', true);
           $.ajax({
-            url: '/authentication/send-recovery-email',
+            url: '[[${contextPath}]]/send-recovery-email',
             type: 'POST',
             data: JSON.stringify({'username': $('#username').val()}),
             contentType: "application/json; charset=utf-8",
@@ -46,13 +47,13 @@
           $(this).attr('disabled', true);
 
           $.ajax({
-            url: '/authentication/reset-password',
+            url: '[[${contextPath}]]/reset-password',
             type: 'POST',
             data: JSON.stringify({'passwordResetCode': $('#passwordResetCode').val(), 'username': $('#username').val(), 'password': $('#password').val()}),
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
-              window.location.href = '/authentication/login?prompt=reset';
+              window.location.href = '[[${contextPath}]]/login?prompt=reset';
             },
             error: function(xhr, textStatus) {
               $('#resetBtn').attr('disabled', false);
@@ -85,7 +86,7 @@
       </div>
 
       <div class="row justify-content-center my-3">
-        <div class="col-6">
+        <div class="col-md-6 col-sm-12">
 
           <div id="alertMsg" class="alert alert-danger mb-3 d-none" role="alert"></div>
 

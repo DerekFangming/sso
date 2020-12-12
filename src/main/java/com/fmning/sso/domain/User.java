@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -18,6 +19,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 @Table(name="sso_users")
+@DynamicUpdate
 public class User {
 
     @Id
@@ -42,6 +44,9 @@ public class User {
 
     @Column(name="password_reset_code")
     private String passwordResetCode;
+
+    @Column(name="password_reset_expiration")
+    private Instant passwordResetExpiration;
 
     @Column(name="created_at")
     private Instant createdAt;
