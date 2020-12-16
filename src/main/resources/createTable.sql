@@ -6,7 +6,9 @@ create table sso_users (
 	confirmed boolean not null,
 	confirm_code text,
 	password_reset_code text,
-	created_at timestamp without time zone not null
+	created_at timestamp without time zone not null,
+	display_name text not null,
+	avatar text
 );
 
 create table sso_client_details (

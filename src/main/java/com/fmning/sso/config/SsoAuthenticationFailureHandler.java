@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class SsoAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     ServletContext servletContext;
 
-    public CustomAuthenticationFailureHandler(ServletContext servletContext) {
+    public SsoAuthenticationFailureHandler(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 

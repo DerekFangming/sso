@@ -9,20 +9,17 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomTokenEnhancer implements TokenEnhancer {
+public class SsoTokenEnhancer implements TokenEnhancer {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         SsoUser user = (SsoUser) authentication.getPrincipal();
         final Map<String, Object> additionalInfo = new HashMap<>();
-
-        additionalInfo.put("customInfo", "some_stuff_here");
-        additionalInfo.put("confirmed", user.isConfirmed());
-//        additionalInfo.put("authorities", user.getAuthorities());
+        additionalInfo.put("display_name", user.getDisplayName());
+        additionalInfo.put("avatar", user.getAvatar());
 
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 
         return accessToken;
     }
-
 }

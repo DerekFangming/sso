@@ -48,6 +48,12 @@ public class User {
     @Column(name="created_at")
     private Instant createdAt;
 
+    @Column(name="display_name")
+    private String displayName;
+
+    @Column(name="avatar")
+    private String avatar;
+
     public Collection<GrantedAuthority> getGrantedAuthorities() {
         Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
         if (role != null) {

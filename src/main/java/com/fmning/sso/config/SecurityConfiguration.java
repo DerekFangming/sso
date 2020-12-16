@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
-                .failureHandler(customAuthenticationFailureHandler())
+                .failureHandler(ssoAuthenticationFailureHandler())
             .and()
                 .rememberMe()
                 .tokenValiditySeconds(604800)
@@ -72,7 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
-        return new CustomAuthenticationFailureHandler(servletContext);
+    public AuthenticationFailureHandler ssoAuthenticationFailureHandler() {
+        return new SsoAuthenticationFailureHandler(servletContext);
     }
 }
