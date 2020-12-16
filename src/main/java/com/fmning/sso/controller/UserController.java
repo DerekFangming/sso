@@ -4,6 +4,7 @@ import com.fmning.sso.domain.User;
 import com.fmning.sso.dto.PasswordResetDto;
 import com.fmning.sso.dto.VerificationCodeDto;
 import com.fmning.sso.repository.UserRepo;
+import com.fmning.sso.service.EmailService;
 import com.fmning.sso.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -26,6 +27,7 @@ public class UserController {
 
     private final UserRepo userRepo;
     private final PasswordService passwordService;
+    private final EmailService emailService;
 
     @RequestMapping("/user")
     public Principal me(Principal principal) {
@@ -40,8 +42,9 @@ public class UserController {
         } else {
             String resetCode = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
             user.setPasswordResetCode(passwordService.encodeVerificationCode(user.getUsername(), resetCode));
-            System.out.println(resetCode);// TODO email
             userRepo.save(user);
+            emailService.sendResetPasswordEmail(user.getUsername(), "displayname", resetCode);// todo
+
             return ResponseEntity.ok(passwordResetDto);
         }
     }

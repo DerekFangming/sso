@@ -21,6 +21,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.security:spring-security-jwt:1.1.0.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 	implementation 'org.postgresql:postgresql:42.2.5'
 	implementation 'org.apache.commons:commons-lang3:3.10'
 
