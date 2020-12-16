@@ -45,9 +45,6 @@ public class User {
     @Column(name="password_reset_code")
     private String passwordResetCode;
 
-    @Column(name="password_reset_expiration")
-    private Instant passwordResetExpiration;
-
     @Column(name="created_at")
     private Instant createdAt;
 
