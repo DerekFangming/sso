@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.InternetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,17 @@ public class EmailService {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
     private final SsoProperties ssoProperties;
+
+
+    public boolean isEmailValid(String email) {
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 
     public void sendResetPasswordEmail(String username, String displayName, String resetCode) {
         StringBuilder sb = new StringBuilder();

@@ -17,7 +17,7 @@
     <body>
       <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
         <div class="container">
-          <a class="navbar-brand">Fmning</a>
+          <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
         </div>
       </nav>
 
@@ -69,7 +69,7 @@
         <div class="row justify-content-center my-3">
           <div class="col-md-6 col-sm-12 text-center">
             <span class="py-2 my-2">Don't have an account?</span>
-            <a type="button" th:href="${contextPath} + '/register'" class="btn btn-link pt-0">Sign up</a>
+            <a type="button" th:href="${contextPath} + '/signup'" class="btn btn-link pt-0">Sign up</a>
           </div>
         </div>
       </div>

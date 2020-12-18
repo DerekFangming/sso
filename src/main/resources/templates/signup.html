@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script>
+      $(document).ready(function() {
+
+        $('#signUpBtn').click(function() {
+          let emailRegex = /\S+@\S+\.\S+/;
+          if ($('#displayName').val().trim() == '') {
+            $('#alertMsg').html('Display name cannot be empty.');
+            $('#alertMsg').removeClass('d-none');
+            return;
+          } else if (!emailRegex.test($('#username').val().trim())) {
+            $('#alertMsg').html('Username must be an email address.');
+            $('#alertMsg').removeClass('d-none');
+            return;
+          } else if ($('#password').val() != $('#confirmPassword').val()) {
+            $('#alertMsg').html('The two passwords you entered does not match.');
+            $('#alertMsg').removeClass('d-none');
+            return;
+          } else if ($('#password').val().length < 6) {
+            $('#alertMsg').html('New passwords needs to be at least 6 characters.');
+            $('#alertMsg').removeClass('d-none');
+            return;
+          }
+
+          $('#alertMsg').addClass('d-none');
+          //$(this).attr('disabled', true);
+
+          $.ajax({
+            url: '[[${contextPath}]]/signup',
+            type: 'POST',
+            data: JSON.stringify({'displayName': $('#displayName').val().trim(), 'username': $('#username').val().trim(), 'password': $('#password').val()}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              console.log(data);
+            },
+            error: function(xhr, textStatus) {
+              $('#resetBtn').attr('disabled', false);
+              if (xhr.status == 400) {
+                $('#alertMsg').html('xhr.responseText');
+                $('#alertMsg').removeClass('d-none');
+              } else {
+                $('#alertMsg').html('Unknown error');
+                $('#alertMsg').removeClass('d-none');
+              }
+            }
+          });
+        });
+
+      });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <div class="container">
+    <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row my-4">
+    <div class="col text-center mt-4">
+      <p class="lead">Account registration</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center my-3">
+    <div class="col-md-6 col-sm-12">
+
+      <div id="alertMsg" class="alert alert-danger mb-3 d-none" role="alert"></div>
+
+      <div class="form-group my-3">
+        <label>Display name</label>
+        <input type="text" class="form-control" style="height:50px;" id="displayName" name="displayName" placeholder="How your name will show up for other users">
+      </div>
+      <div class="form-group my-3">
+        <label>Your username</label>
+        <input type="text" class="form-control" style="height:50px;" id="username" name="username" placeholder="Your email address">
+      </div>
+      <div class="form-group my-3">
+        <label>Your password</label>
+        <input type="password" class="form-control" style="height:50px;" id="password" name="password" placeholder="Your password">
+      </div>
+      <div class="form-group my-3">
+        <label>Confirm your password</label>
+        <input type="password" class="form-control" style="height:50px;" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+      </div>
+      <button id="signUpBtn" class="btn btn-primary btn-block my-4">Sign up</button>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

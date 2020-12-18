@@ -1,18 +1,16 @@
 package com.fmning.sso.controller;
 
 import com.fmning.sso.domain.User;
-import com.fmning.sso.dto.PasswordResetDto;
+import com.fmning.sso.dto.UserDto;
 import com.fmning.sso.dto.VerificationCodeDto;
 import com.fmning.sso.repository.UserRepo;
 import com.fmning.sso.service.EmailService;
 import com.fmning.sso.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,9 +32,32 @@ public class UserController {
         return principal;
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<Object> signUp(@RequestBody UserDto userDto) {
+
+        if (!emailService.isEmailValid(userDto.getUsername())) {
+            throw new IllegalArgumentException("abc");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username must be an email address.");
+        } else if (!passwordService.isPasswordValid(userDto.getPassword())) {
+            return ResponseEntity.badRequest().body(userDto);
+        }
+
+        User user = userRepo.findByUsername(userDto.getUsername());
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        System.out.println(userDto.getDisplayName());
+        System.out.println(userDto.getPassword());
+        System.out.println(userDto.getUsername());
+        if (userDto.getDisplayName().equals("a")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is already taken.");
+        }
+        return ResponseEntity.ok(userDto);
+    }
+
     @PostMapping("/send-recovery-email")
-    public ResponseEntity<PasswordResetDto> sendRecoveryEmail(@RequestBody PasswordResetDto passwordResetDto) {
-        User user = userRepo.findByUsername(passwordResetDto.getUsername());
+    public ResponseEntity<UserDto> sendRecoveryEmail(@RequestBody UserDto userDto) {
+        User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -45,29 +66,29 @@ public class UserController {
             userRepo.save(user);
             emailService.sendResetPasswordEmail(user.getUsername(), "displayname", resetCode);// todo
 
-            return ResponseEntity.ok(passwordResetDto);
+            return ResponseEntity.ok(userDto);
         }
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<PasswordResetDto> resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
-        User user = userRepo.findByUsername(passwordResetDto.getUsername());
+    public ResponseEntity<UserDto> resetPassword(@RequestBody UserDto userDto) {
+        User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
             return ResponseEntity.notFound().build();
-        } else if (!passwordService.isPasswordValid(passwordResetDto.getPassword())) {
-            return ResponseEntity.badRequest().body(passwordResetDto);
+        } else if (!passwordService.isPasswordValid(userDto.getPassword())) {
+            return ResponseEntity.badRequest().body(userDto);
         } else {
             VerificationCodeDto dto = passwordService.decodeVerificationCode(user.getPasswordResetCode());
-            if (!dto.getCode().equalsIgnoreCase(passwordResetDto.getPasswordResetCode())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(passwordResetDto);
+            if (!dto.getCode().equalsIgnoreCase(userDto.getPasswordResetCode())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userDto);
             } else if (dto.getExpiration().isBefore(Instant.now())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(passwordResetDto);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userDto);
             }
 
             user.setPasswordResetCode(null);
-            user.setPassword(passwordService.encodePassword(passwordResetDto.getPassword()));
+            user.setPassword(passwordService.encodePassword(userDto.getPassword()));
             userRepo.save(user);
-            return ResponseEntity.ok(passwordResetDto);
+            return ResponseEntity.ok(userDto);
         }
     }
 

@@ -43,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new AppEntryPoint("/login"))
             .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/logout", "/encode-password/*", "/favicon.ico").permitAll()
+                .antMatchers("/login", "/signup", "/logout", "/encode-password/*", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()

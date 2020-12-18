@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PasswordResetDto {
+public class UserDto {
+    private String displayName;
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

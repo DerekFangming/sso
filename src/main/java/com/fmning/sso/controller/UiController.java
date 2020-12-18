@@ -32,10 +32,10 @@ public class UiController {
         String clientId = request.getParameter("client_id");
         return "login";
     }
-    @GetMapping("/register")
+    @GetMapping("/signup")
     public String register(Model model) {
         model.addAttribute("contextPath", servletContext.getContextPath());
-        return "register";
+        return "signup";
     }
 
     @GetMapping("/reset-password")
