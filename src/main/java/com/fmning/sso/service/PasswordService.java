@@ -32,7 +32,7 @@ public class PasswordService {
     }
 
     public boolean isPasswordValid(String password) {
-        return !StringUtils.isEmpty(password) && password.length() >= 6;
+        return !StringUtils.isBlank(password) && password.length() >= 6;
     }
 
     public String encodePassword(String password) {
@@ -40,7 +40,7 @@ public class PasswordService {
     }
 
     public String encodeVerificationCode(String username, String code) {
-        VerificationCodeDto verificationCodeDto = new VerificationCodeDto(username, code, Instant.now().plus(1, ChronoUnit.DAYS));
+        VerificationCodeDto verificationCodeDto = new VerificationCodeDto(username, code, Instant.now().plus(1, ChronoUnit.SECONDS));
         try {
             String json = objectMapper.writeValueAsString(verificationCodeDto);
             byte[] jsonBytes = Base64.encodeBase64(json.getBytes());

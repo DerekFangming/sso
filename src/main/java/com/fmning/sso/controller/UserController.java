@@ -1,6 +1,7 @@
 package com.fmning.sso.controller;
 
 import com.fmning.sso.domain.User;
+import com.fmning.sso.dto.BaseDto;
 import com.fmning.sso.dto.UserDto;
 import com.fmning.sso.dto.VerificationCodeDto;
 import com.fmning.sso.repository.UserRepo;
@@ -8,6 +9,7 @@ import com.fmning.sso.service.EmailService;
 import com.fmning.sso.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,24 +35,26 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signUp(@RequestBody UserDto userDto) {
+    public ResponseEntity<BaseDto> signUp(@RequestBody UserDto userDto) {
 
-        if (!emailService.isEmailValid(userDto.getUsername())) {
-            throw new IllegalArgumentException("abc");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username must be an email address.");
+        if (StringUtils.isBlank(userDto.getDisplayName())) {
+            throw new IllegalArgumentException("Display name must not be empty.");
+        } else if (!emailService.isEmailValid(userDto.getUsername())) {
+            throw new IllegalArgumentException("Username must be an email address.");
         } else if (!passwordService.isPasswordValid(userDto.getPassword())) {
-            return ResponseEntity.badRequest().body(userDto);
+            throw new IllegalArgumentException("Password does not meet the strength requirement.");
         }
 
         User user = userRepo.findByUsername(userDto.getUsername());
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+        if (user != null) {
+            throw new IllegalArgumentException("This username is already registered.");
         }
+
         System.out.println(userDto.getDisplayName());
         System.out.println(userDto.getPassword());
         System.out.println(userDto.getUsername());
         if (userDto.getDisplayName().equals("a")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is already taken.");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is already taken.");
         }
         return ResponseEntity.ok(userDto);
     }
@@ -59,12 +63,12 @@ public class UserController {
     public ResponseEntity<UserDto> sendRecoveryEmail(@RequestBody UserDto userDto) {
         User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            throw new IllegalArgumentException("The username is not found.");
         } else {
             String resetCode = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
             user.setPasswordResetCode(passwordService.encodeVerificationCode(user.getUsername(), resetCode));
             userRepo.save(user);
-            emailService.sendResetPasswordEmail(user.getUsername(), "displayname", resetCode);// todo
+            emailService.sendResetPasswordEmail(user.getUsername(), user.getDisplayName(), resetCode);
 
             return ResponseEntity.ok(userDto);
         }
@@ -74,15 +78,15 @@ public class UserController {
     public ResponseEntity<UserDto> resetPassword(@RequestBody UserDto userDto) {
         User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            throw new IllegalArgumentException("The username is not found.");
         } else if (!passwordService.isPasswordValid(userDto.getPassword())) {
-            return ResponseEntity.badRequest().body(userDto);
+            throw new IllegalArgumentException("Password does not meet the strength requirement.");
         } else {
             VerificationCodeDto dto = passwordService.decodeVerificationCode(user.getPasswordResetCode());
             if (!dto.getCode().equalsIgnoreCase(userDto.getPasswordResetCode())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userDto);
+                throw new IllegalArgumentException("The recovery code does not match our record.");
             } else if (dto.getExpiration().isBefore(Instant.now())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userDto);
+                throw new IllegalArgumentException("The recovery code has expired. Please reset it again.");
             }
 
             user.setPasswordResetCode(null);

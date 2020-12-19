@@ -24,9 +24,9 @@
               $('#recoverySection').addClass('d-none');
               $('#resetSection').removeClass('d-none');
             },
-            error: function(request, error) {
+            error: function(xhr, error) {
               $('#recoveryBtn').attr('disabled', false);
-              $('#alertMsg').html('The username is not found.');
+              $('#alertMsg').html(xhr.responseJSON.message);
               $('#alertMsg').removeClass('d-none');
             }
           });
@@ -57,13 +57,8 @@
             },
             error: function(xhr, textStatus) {
               $('#resetBtn').attr('disabled', false);
-              if (xhr.status == 400) {
-                $('#alertMsg').html('Bad format.');
-                $('#alertMsg').removeClass('d-none');
-              } else if (xhr.status == 401) {
-                $('#alertMsg').html('The recovery code does not match our record.');
-                $('#alertMsg').removeClass('d-none');
-              }
+              $('#alertMsg').html(xhr.responseJSON.message);
+              $('#alertMsg').removeClass('d-none');
             }
           });
         });

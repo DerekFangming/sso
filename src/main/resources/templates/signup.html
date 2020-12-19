@@ -26,7 +26,7 @@
             $('#alertMsg').removeClass('d-none');
             return;
           } else if ($('#password').val().length < 6) {
-            $('#alertMsg').html('New passwords needs to be at least 6 characters.');
+            $('#alertMsg').html('Passwords needs to be at least 6 characters.');
             $('#alertMsg').removeClass('d-none');
             return;
           }
@@ -45,13 +45,8 @@
             },
             error: function(xhr, textStatus) {
               $('#resetBtn').attr('disabled', false);
-              if (xhr.status == 400) {
-                $('#alertMsg').html('xhr.responseText');
-                $('#alertMsg').removeClass('d-none');
-              } else {
-                $('#alertMsg').html('Unknown error');
-                $('#alertMsg').removeClass('d-none');
-              }
+              $('#alertMsg').html(xhr.responseJSON.message);
+              $('#alertMsg').removeClass('d-none');
             }
           });
         });
