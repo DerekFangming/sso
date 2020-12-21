@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <style>
       input[type=checkbox] {
         transform: scale(1.5);
@@ -58,7 +58,14 @@
                     <input type="checkbox" class="ml-2 mt-3" name="remember-me" /> <span class="ml-2 mt-1">Remember me</span>
                   </div>
                   <div class="col">
-                    <a type="button" th:href="${contextPath} + '/reset-password'" class="btn btn-link float-right">Problems signing in?</a>
+                    <div class="dropdown show float-right">
+                      <a class="btn btn-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">Problems signing in?</a>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" th:href="${contextPath} + '/reset-password'">Reset password</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

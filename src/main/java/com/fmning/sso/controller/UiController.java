@@ -38,6 +38,12 @@ public class UiController {
         return "signup";
     }
 
+    @GetMapping("/verify-email")
+    public String verifyEmail(Model model) {
+        model.addAttribute("contextPath", servletContext.getContextPath());
+        return "verify";
+    }
+
     @GetMapping("/reset-password")
     public String resetPassword(Model model) {
         model.addAttribute("contextPath", servletContext.getContextPath());
