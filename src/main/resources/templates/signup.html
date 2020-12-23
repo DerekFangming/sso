@@ -32,7 +32,7 @@
           }
 
           $('#alertMsg').addClass('d-none');
-          //$(this).attr('disabled', true);
+          $(this).attr('disabled', true);
 
           $.ajax({
             url: '[[${contextPath}]]/signup',
@@ -41,10 +41,10 @@
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
-              console.log(data);
+               $('#confirmationModal').modal({backdrop: 'static', keyboard: false});
             },
             error: function(xhr, textStatus) {
-              $('#resetBtn').attr('disabled', false);
+              $('#signUpBtn').attr('disabled', false);
               $('#alertMsg').html(xhr.responseJSON.message);
               $('#alertMsg').removeClass('d-none');
             }
@@ -91,6 +91,23 @@
       </div>
       <button id="signUpBtn" class="btn btn-primary btn-block my-4">Sign up</button>
 
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><i class="fa fa-check-circle-o fa-lg mr-1" style="color:#28a745" aria-hidden="true"></i> Registration complete</h5>
+      </div>
+      <div class="modal-body">
+        Account registration is complete. An email is sent to your inbox to verify your account. Please click on the link to activate your account
+        before you are able to login. The link will be valid for 24 hours.
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-primary" th:href="${contextPath}">Go to login</a>
+      </div>
     </div>
   </div>
 </div>

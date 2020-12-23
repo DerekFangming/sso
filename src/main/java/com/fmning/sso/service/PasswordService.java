@@ -40,7 +40,7 @@ public class PasswordService {
     }
 
     public String encodeVerificationCode(String username, String code) {
-        VerificationCodeDto verificationCodeDto = new VerificationCodeDto(username, code, Instant.now().plus(1, ChronoUnit.SECONDS));
+        VerificationCodeDto verificationCodeDto = new VerificationCodeDto(username, code, Instant.now().plus(1, ChronoUnit.DAYS));
         try {
             String json = objectMapper.writeValueAsString(verificationCodeDto);
             byte[] jsonBytes = Base64.encodeBase64(json.getBytes());

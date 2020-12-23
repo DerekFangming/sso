@@ -43,7 +43,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new AppEntryPoint("/login"))
             .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/signup", "/logout", "/encode-password/*", "/favicon.ico").permitAll()
+                .antMatchers("/login", "/signup", "/logout", "/encode-password/*", "/verify-email", "/favicon.ico",
+                        "/reset-password", "/send-recovery-email", "/send-verification-email").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
@@ -60,10 +61,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/reset-password", "/send-recovery-email");
-    }
+//    @Override
+//    public void configure(WebSecurity web) {
+//        web.ignoring().antMatchers("/reset-password", "/send-recovery-email");
+//    }
 
     @Override
     @Bean

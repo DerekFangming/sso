@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.InternetAddress;
+import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class EmailService {
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
     private final SsoProperties ssoProperties;
+    private final ServletContext servletContext;
 
 
     public boolean isEmailValid(String email) {
@@ -33,11 +35,32 @@ public class EmailService {
         }
     }
 
+    public void sendConfirmAccountEmail(String username, String displayName, String confirmToken) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hello ").append(displayName).append(",\n")
+                .append("Here is the link to confirm your email address. This link will expire in 24 hours.\n\n")
+                .append(ssoProperties.isProduction() ?  "https://sso.fmning.com/" : "http://localhost:8081")
+                .append(servletContext.getContextPath())
+                .append("/verify-email?code=")
+                .append(confirmToken)
+                .append("\n\n")
+                .append("Thank you,\n")
+                .append("Support team");
+
+        if (ssoProperties.isProduction()) {
+            sendEmail(username, "Confirm your account", sb.toString());
+        } else {
+            System.out.println(sb.toString());
+        }
+    }
+
     public void sendResetPasswordEmail(String username, String displayName, String resetCode) {
         StringBuilder sb = new StringBuilder();
         sb.append("Hello ").append(displayName).append(",\n")
                 .append("Here is the verification code to reset your password. This code will expire in 24 hours.\n\n")
-                .append(resetCode).append("\n\n")
+                .append(resetCode)
+                .append("\n\n")
                 .append("Thank you,\n")
                 .append("Support team");
 

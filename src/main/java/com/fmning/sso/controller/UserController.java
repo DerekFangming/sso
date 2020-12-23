@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired})
@@ -50,13 +50,38 @@ public class UserController {
             throw new IllegalArgumentException("This username is already registered.");
         }
 
-        System.out.println(userDto.getDisplayName());
-        System.out.println(userDto.getPassword());
-        System.out.println(userDto.getUsername());
-        if (userDto.getDisplayName().equals("a")) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username is already taken.");
-        }
+        String confirmCode = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+        String encryptedConfirmCode = passwordService.encodeVerificationCode(userDto.getUsername().trim(), confirmCode);
+        User newUser = User.builder()
+                .username(userDto.getUsername().trim())
+                .password(passwordService.encodePassword(userDto.getPassword()))
+                .displayName(userDto.getDisplayName().trim())
+                .confirmCode(encryptedConfirmCode)
+                .createdAt(Instant.now())
+                .build();
+
+        userRepo.save(newUser);
+        emailService.sendConfirmAccountEmail(newUser.getUsername(), newUser.getDisplayName(), encryptedConfirmCode);
+
         return ResponseEntity.ok(userDto);
+    }
+
+    @PostMapping("/send-verification-email")
+    public ResponseEntity<UserDto> sendVerificationEmail(@RequestBody UserDto userDto) {
+        User user = userRepo.findByUsername(userDto.getUsername());
+        if (user == null) {
+            throw new IllegalArgumentException("The username is not found.");
+        } else if (user.isConfirmed()) {
+            throw new IllegalArgumentException("This account is already verified.");
+        } else {
+            String confirmCode = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+            String encryptedConfirmCode = passwordService.encodeVerificationCode(userDto.getUsername(), confirmCode);
+            user.setConfirmCode(encryptedConfirmCode);
+            userRepo.save(user);
+            emailService.sendConfirmAccountEmail(user.getUsername(), user.getDisplayName(), encryptedConfirmCode);
+
+            return ResponseEntity.ok(userDto);
+        }
     }
 
     @PostMapping("/send-recovery-email")
