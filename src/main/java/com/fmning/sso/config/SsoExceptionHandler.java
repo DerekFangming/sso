@@ -20,6 +20,8 @@ public class SsoExceptionHandler extends ResponseEntityExceptionHandler {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDto(e.getMessage()));
         }
 
+        e.printStackTrace();
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDto("Internal server error"));
     }
 
