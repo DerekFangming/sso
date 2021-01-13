@@ -2,6 +2,7 @@ package com.fmning.sso.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,12 @@ public class UtilController {
     public String ping1() {
         SecurityContext sc = SecurityContextHolder.getContext();
         return "ok";
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity test() throws Exception {
+//        Thread.sleep(5000);
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/ping2")

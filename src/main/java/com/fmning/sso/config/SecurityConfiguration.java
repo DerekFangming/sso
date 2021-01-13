@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/login", "/signup", "/logout", "/encode-password/*", "/verify-email", "/favicon.ico",
-                        "/reset-password", "/send-recovery-email", "/send-verification-email").permitAll()
+                        "/reset-password", "/send-recovery-email", "/send-verification-email", "/test").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()

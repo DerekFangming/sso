@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#imageSelectBtn').click(function() {
+          $('#imageSelectInput').click();
+        });
+
+        $('#imageSelectInput').change(function(e) {
+          var file = e.target.files[0];
+          var reader = new FileReader();
+          reader.onload = (event) =>{
+            var fileReader = event.target;
+            $('#avatar').attr('src', fileReader.result.toString());
+          };
+          reader.readAsDataURL(file);
+        });
+
+        $('#updateProfileBtn').click(function() {
+          $('#imageSelectInput').click();
+        });
+
+        function updateUser() {
+        }
+
+      });
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+        <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item" th:if="${idAdmin}">
+              <a class="nav-link" th:href="${contextPath}">Dashboard</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#"data-toggle="dropdown" th:text="${user.displayName}"></a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+              </div>
+              <form id="logout-form" th:action="@{/logout}" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row my-5">
+        <div class="col-4">
+          <img id="avatar" class="card-img-top" th:src="${user.avatar == null} ? 'https://i.imgur.com/lkAhvIs.png' : ${user.avatar}" />
+        </div>
+        <div class="col-8">
+          <div class="card">
+            <div class="card-header">User Details</div>
+            <div class="card-body">
+              <form>
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">Username</label>
+                  <div class="col-sm-8">
+                    <p class="mt-2 font-weight-bold" th:text="${user.username}"></p>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">Roles</label>
+                  <div class="col-sm-8">
+                    <p class="mt-2 font-weight-bold" th:text="${user.readableRoles}"></p>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">Display name</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" th:value="${user.displayName}">
+                  </div>
+                </div>
+                <div class="form-group row mt-5 mb-0">
+                  <div class="col">
+                    <input id="imageSelectInput" type="file" class="d-none" accept="image/*" name="my_file">
+                    <button type="button" class="btn btn-success pull-right ml-3">Save changes</button>
+                    <button id="imageSelectBtn" type="button" class="btn btn-primary pull-right">Update profile image</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="card mt-5">
+            <div class="card-header">Reset password</div>
+            <div class="card-body">
+              <form>
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">Current password</label>
+                  <div class="col-sm-8">
+                    <input type="password" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">New password</label>
+                  <div class="col-sm-8">
+                    <input type="password" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-sm-4 col-form-label">Confirm new password</label>
+                  <div class="col-sm-8">
+                    <input type="password" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group row mt-5 mb-0">
+                  <div class="col">
+                    <button type="button" class="btn btn-success pull-right">Reset password</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

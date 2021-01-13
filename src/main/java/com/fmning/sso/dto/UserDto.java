@@ -11,9 +11,12 @@ import lombok.EqualsAndHashCode;
 public class UserDto extends BaseDto {
     private String displayName;
     private String username;
+    private String avatar;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordResetCode;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String newPassword;
 }

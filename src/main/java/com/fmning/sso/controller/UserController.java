@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired})
@@ -119,6 +118,12 @@ public class UserController {
             userRepo.save(user);
             return ResponseEntity.ok(userDto);
         }
+    }
+
+    @PostMapping("/user/profile")
+    public ResponseEntity<UserDto> me(@RequestBody UserDto userDto) {
+
+        return ResponseEntity.ok(userDto);
     }
 
 
