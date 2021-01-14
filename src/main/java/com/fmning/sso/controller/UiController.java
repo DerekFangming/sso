@@ -1,5 +1,6 @@
 package com.fmning.sso.controller;
 
+import com.fmning.sso.SsoProperties;
 import com.fmning.sso.domain.SsoUser;
 import com.fmning.sso.domain.User;
 import com.fmning.sso.dto.VerificationCodeDto;
@@ -25,6 +26,7 @@ import java.time.Instant;
 public class UiController {
 
     private final UserRepo userRepo;
+    private final SsoProperties ssoProperties;
     private final ServletContext servletContext;
     private final PasswordService passwordService;
 
@@ -49,8 +51,9 @@ public class UiController {
         boolean isAdmin = user.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN"));
 
         model.addAttribute("idAdmin", isAdmin);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userRepo.findByUsername(user.getUsername()));
         model.addAttribute("contextPath", servletContext.getContextPath());
+        model.addAttribute("uploadUrl", ssoProperties.isProduction() ? "https://fmning.com/tools/api/images" : "http://localhost:8080/tools/api/images");
         return "profile";
     }
 

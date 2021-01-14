@@ -6,7 +6,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script>
       $(document).ready(function() {
@@ -15,21 +15,50 @@
         });
 
         $('#imageSelectInput').change(function(e) {
+          $('#imageSelectBtn').attr('disabled', true);
           var file = e.target.files[0];
           var reader = new FileReader();
-          reader.onload = (event) =>{
+          reader.onload = function(event) {
             var fileReader = event.target;
-            $('#avatar').attr('src', fileReader.result.toString());
-          };
+
+            $.ajax({
+              url: '[[${uploadUrl}]]',
+              type: 'POST',
+              data: JSON.stringify({'data': fileReader.result.toString()}),
+              contentType: "application/json; charset=utf-8",
+              dataType:'json',
+              success: function(data) {
+                $('#avatar').attr('src', data.url);
+                $('#imageSelectBtn').attr('disabled', false);
+              },
+              error: function(xhr, textStatus) {
+                $('#imageSelectBtn').attr('disabled', false);
+              }
+            });
+          }
           reader.readAsDataURL(file);
         });
 
         $('#updateProfileBtn').click(function() {
-          $('#imageSelectInput').click();
-        });
 
-        function updateUser() {
-        }
+          $('#updateProfileBtn').attr('disabled', true);
+          $.ajax({
+            url: '[[${contextPath}]]/user/profile',
+            type: 'POST',
+            data: JSON.stringify({'displayName': $('#displayName').val(), 'avatar': $('#avatar').attr('src')}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              $("#profileSuccessAlert").fadeTo(2000, 500).slideUp(500, function(){
+                $("#profileSuccessAlert").slideUp(500);
+              });
+              $('#updateProfileBtn').attr('disabled', false);
+            },
+            error: function(xhr, textStatus) {
+              $('#updateProfileBtn').attr('disabled', false);
+            }
+          });
+        });
 
       });
     </script>
@@ -70,6 +99,9 @@
           <div class="card">
             <div class="card-header">User Details</div>
             <div class="card-body">
+              <div id="profileSuccessAlert" class="alert alert-success" style="display: none;" role="alert">
+                Your profile is successfully updated.
+              </div>
               <form>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">Username</label>
@@ -80,19 +112,19 @@
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">Roles</label>
                   <div class="col-sm-8">
-                    <p class="mt-2 font-weight-bold" th:text="${user.readableRoles}"></p>
+                    <p class="mt-2 font-weight-bold" th:text="${user.role}"></p>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">Display name</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" th:value="${user.displayName}">
+                    <input id="displayName" type="text" class="form-control" th:value="${user.displayName}">
                   </div>
                 </div>
                 <div class="form-group row mt-5 mb-0">
                   <div class="col">
                     <input id="imageSelectInput" type="file" class="d-none" accept="image/*" name="my_file">
-                    <button type="button" class="btn btn-success pull-right ml-3">Save changes</button>
+                    <button id="updateProfileBtn" type="button" class="btn btn-success pull-right ml-3">Save changes</button>
                     <button id="imageSelectBtn" type="button" class="btn btn-primary pull-right">Update profile image</button>
                   </div>
                 </div>

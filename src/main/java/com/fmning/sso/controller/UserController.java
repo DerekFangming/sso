@@ -1,5 +1,6 @@
 package com.fmning.sso.controller;
 
+import com.fmning.sso.domain.SsoUser;
 import com.fmning.sso.domain.User;
 import com.fmning.sso.dto.BaseDto;
 import com.fmning.sso.dto.UserDto;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -121,8 +123,13 @@ public class UserController {
     }
 
     @PostMapping("/user/profile")
-    public ResponseEntity<UserDto> me(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateProfile(@RequestBody UserDto userDto) {
+        SsoUser user = (SsoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User savedUser = userRepo.findByUsername(user.getUsername());
+        savedUser.setDisplayName(userDto.getDisplayName());
+        savedUser.setAvatar(userDto.getAvatar());
 
+        userRepo.save(savedUser);
         return ResponseEntity.ok(userDto);
     }
 
