@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.time.Instant;
 
+import static com.fmning.sso.controller.UiController.DEFAULT_AVATAR;
+
 @RestController
 @RequiredArgsConstructor(onConstructor_={@Autowired})
 public class UserController {
@@ -127,11 +129,34 @@ public class UserController {
         SsoUser user = (SsoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User savedUser = userRepo.findByUsername(user.getUsername());
         savedUser.setDisplayName(userDto.getDisplayName());
-        savedUser.setAvatar(userDto.getAvatar());
+
+        if (DEFAULT_AVATAR.equals(userDto.getAvatar())) {
+            savedUser.setAvatar(null);
+        } else {
+            savedUser.setAvatar(userDto.getAvatar());
+        }
 
         userRepo.save(savedUser);
         return ResponseEntity.ok(userDto);
     }
+
+        @PostMapping("/user/password")
+        public ResponseEntity<UserDto> updatePassword(@RequestBody UserDto userDto) {
+            String username = ((SsoUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+            User user = userRepo.findByUsername(username);
+
+            if (user == null) {
+                throw new IllegalArgumentException("The username is not found.");
+            } else if (!passwordService.isPasswordValid(userDto.getNewPassword())) {
+                throw new IllegalArgumentException("Password does not meet the strength requirement.");
+            } else if (!passwordService.matchesPassword(userDto.getPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("The password you entered does not match our record.");
+            }
+
+            user.setPassword(passwordService.encodePassword(userDto.getNewPassword()));
+            userRepo.save(user);
+            return ResponseEntity.ok(userDto);
+        }
 
 
 }

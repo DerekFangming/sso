@@ -60,6 +60,39 @@
           });
         });
 
+        $('#passwordResetBtn').click(function() {
+          if ($('#newPassword').val() != $('#confirmPassword').val()) {
+            $('#passwordAlert').html('The two passwords you entered does not match.');
+            $('#passwordAlert').removeClass('d-none');
+            return;
+          } else if ($('#newPassword').val().length < 6) {
+            $('#passwordAlert').html('New passwords needs to be at least 6 characters.');
+            $('#passwordAlert').removeClass('d-none');
+            return;
+          }
+
+          $('#passwordAlert').addClass('d-none');
+          $('#passwordResetBtn').attr('disabled', true);
+          $.ajax({
+            url: '[[${contextPath}]]/user/password',
+            type: 'POST',
+            data: JSON.stringify({'password': $('#password').val(), 'newPassword': $('#newPassword').val()}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              $("#passwordSuccessAlert").fadeTo(2000, 500).slideUp(500, function(){
+                $("#passwordSuccessAlert").slideUp(500);
+              });
+              $('#passwordResetBtn').attr('disabled', false);
+            },
+            error: function(xhr, textStatus) {
+              $('#passwordAlert').html(xhr.responseJSON.message);
+              $('#passwordAlert').removeClass('d-none');
+              $('#passwordResetBtn').attr('disabled', false);
+            }
+          });
+        });
+
       });
     </script>
   </head>
@@ -93,7 +126,7 @@
     <div class="container">
       <div class="row my-5">
         <div class="col-4">
-          <img id="avatar" class="card-img-top" th:src="${user.avatar == null} ? 'https://i.imgur.com/lkAhvIs.png' : ${user.avatar}" />
+          <img id="avatar" class="card-img-top" th:src="${user.avatar}" />
         </div>
         <div class="col-8">
           <div class="card">
@@ -135,28 +168,32 @@
           <div class="card mt-5">
             <div class="card-header">Reset password</div>
             <div class="card-body">
+              <div id="passwordAlert" class="alert alert-danger d-none" role="alert">sdsadasd</div>
+              <div id="passwordSuccessAlert" class="alert alert-success" style="display: none;" role="alert">
+                Your password is successfully updated.
+              </div>
               <form>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">Current password</label>
                   <div class="col-sm-8">
-                    <input type="password" class="form-control">
+                    <input id="password" type="password" class="form-control">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">New password</label>
                   <div class="col-sm-8">
-                    <input type="password" class="form-control">
+                    <input id="newPassword" type="password" class="form-control">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">Confirm new password</label>
                   <div class="col-sm-8">
-                    <input type="password" class="form-control">
+                    <input id="confirmPassword" type="password" class="form-control">
                   </div>
                 </div>
                 <div class="form-group row mt-5 mb-0">
                   <div class="col">
-                    <button type="button" class="btn btn-success pull-right">Reset password</button>
+                    <button id="passwordResetBtn" type="button" class="btn btn-success pull-right">Reset password</button>
                   </div>
                 </div>
               </form>

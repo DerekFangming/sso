@@ -30,6 +30,8 @@ public class UiController {
     private final ServletContext servletContext;
     private final PasswordService passwordService;
 
+    public static final String DEFAULT_AVATAR = "https://i.imgur.com/lkAhvIs.png";
+
     @GetMapping("/")
     public String dashboard(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,6 +52,8 @@ public class UiController {
         SsoUser user = (SsoUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         boolean isAdmin = user.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN"));
 
+        User savedUser = userRepo.findByUsername(user.getUsername());
+        if (savedUser.getAvatar() == null) savedUser.setAvatar(DEFAULT_AVATAR);
         model.addAttribute("idAdmin", isAdmin);
         model.addAttribute("user", userRepo.findByUsername(user.getUsername()));
         model.addAttribute("contextPath", servletContext.getContextPath());

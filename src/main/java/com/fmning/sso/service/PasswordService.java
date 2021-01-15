@@ -19,7 +19,6 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor(onConstructor_={@Autowired})
 public class PasswordService {
 
-//    private final ObjectMapper objectMapper;
     private ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -37,6 +36,10 @@ public class PasswordService {
 
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    public boolean matchesPassword(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
     }
 
     public String encodeVerificationCode(String username, String code) {
