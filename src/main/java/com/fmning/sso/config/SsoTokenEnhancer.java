@@ -15,8 +15,11 @@ public class SsoTokenEnhancer implements TokenEnhancer {
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         SsoUser user = (SsoUser) authentication.getPrincipal();
         final Map<String, Object> additionalInfo = new HashMap<>();
-        additionalInfo.put("display_name", user.getDisplayName());
-        additionalInfo.put("avatar", user.getAvatar());
+        additionalInfo.put("name", user.getDisplayName());
+
+        if (user.getAvatar() != null) {
+            additionalInfo.put("avatar", user.getAvatar());
+        }
 
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 
