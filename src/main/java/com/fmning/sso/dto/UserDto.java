@@ -19,4 +19,8 @@ public class UserDto extends BaseDto {
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String newPassword;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private int id;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String roles;
 }

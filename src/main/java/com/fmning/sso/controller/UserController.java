@@ -13,6 +13,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -140,23 +141,43 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-        @PostMapping("/user/password")
-        public ResponseEntity<UserDto> updatePassword(@RequestBody UserDto userDto) {
-            String username = ((SsoUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-            User user = userRepo.findByUsername(username);
+    @PostMapping("/user/password")
+    public ResponseEntity<UserDto> updatePassword(@RequestBody UserDto userDto) {
+        String username = ((SsoUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepo.findByUsername(username);
 
-            if (user == null) {
-                throw new IllegalArgumentException("The username is not found.");
-            } else if (!passwordService.isPasswordValid(userDto.getNewPassword())) {
-                throw new IllegalArgumentException("Password does not meet the strength requirement.");
-            } else if (!passwordService.matchesPassword(userDto.getPassword(), user.getPassword())) {
-                throw new IllegalArgumentException("The password you entered does not match our record.");
-            }
-
-            user.setPassword(passwordService.encodePassword(userDto.getNewPassword()));
-            userRepo.save(user);
-            return ResponseEntity.ok(userDto);
+        if (user == null) {
+            throw new IllegalArgumentException("The username is not found.");
+        } else if (!passwordService.isPasswordValid(userDto.getNewPassword())) {
+            throw new IllegalArgumentException("Password does not meet the strength requirement.");
+        } else if (!passwordService.matchesPassword(userDto.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("The password you entered does not match our record.");
         }
+
+        user.setPassword(passwordService.encodePassword(userDto.getNewPassword()));
+        userRepo.save(user);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PostMapping("/user/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateRoles(@RequestBody UserDto userDto) {
+        if (userDto.getId() <= 0) {
+            throw new IllegalArgumentException("The user ID is invalid.");
+        }
+        User user = userRepo.findById(userDto.getId()).orElse(null);
+        if (user == null) {
+            throw new IllegalArgumentException("The user is not found.");
+        }
+
+        if (StringUtils.isBlank(userDto.getRoles())) {
+            user.setRole(null);
+        } else {
+            user.setRole(userDto.getRoles().toUpperCase().trim());
+        }
+        userRepo.save(user);
+        return ResponseEntity.ok(userDto);
+    }
 
 
 }

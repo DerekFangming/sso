@@ -6,8 +6,39 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('.user').click(function() {
+          $('#userId').val($(this).find('.id').html());
+          $('#userRoles').val($(this).find('.role').html());
+          $('#userUpdateModal').modal({backdrop: 'static', keyboard: false});
+        });
+
+        $('#saveBtn').click(function() {
+          $('#alertMsg').addClass('d-none');
+          $(this).attr('disabled', true);
+          $.ajax({
+            url: '[[${contextPath}]]/user/roles',
+            type: 'POST',
+            data: JSON.stringify({'id': $('#userId').val().trim(), 'roles': $('#userRoles').val().trim()}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              $('#saveBtn').attr('disabled', false);
+              $('#alertMsg').addClass('d-none');
+              $('#userUpdateModal').modal('hide');
+            },
+            error: function(xhr, textStatus) {
+              $('#saveBtn').attr('disabled', false);
+              $('#alertMsg').html(xhr.responseJSON.message);
+              $('#alertMsg').removeClass('d-none');
+            }
+          });
+        });
+      });
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -51,11 +82,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user : ${userList}">
-              <th scope="row" th:text="${user.id}"></th>
+            <tr class="user" th:attr="user-id=${user.id}" style="cursor: pointer" th:each="user : ${userList}">
+              <th class="id" scope="row" th:text="${user.id}"></th>
               <td th:text="${user.username}"></td>
               <td th:text="${user.displayName}"></td>
-              <td th:text="${user.role}"></td>
+              <td class="role" th:text="${user.role}"></td>
               <td th:if="${user.confirmed}"><i class="fa fa-lg fa-check-circle text-success" aria-hidden="true"></i></td>
               <td th:if="${!user.confirmed}"><i class="fa fa-lg fa-times-circle text-danger" aria-hidden="true"></i></td>
             </tr>
@@ -64,5 +95,32 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="userUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Update user</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="alertMsg" class="alert alert-danger mb-3 d-none" role="alert"></div>
+            <form>
+              <div class="form-group">
+                <label for="userRoles">Roles</label>
+                <input type="text" class="d-none" id="userId">
+                <input type="text" class="form-control" id="userRoles">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="saveBtn" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
