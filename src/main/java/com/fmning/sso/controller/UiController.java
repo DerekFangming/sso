@@ -33,7 +33,7 @@ public class UiController {
     public static final String DEFAULT_AVATAR = "https://i.imgur.com/lkAhvIs.png";
 
     @GetMapping("/")
-    public String dashboard(Model model) {
+    public String homePage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SsoUser user = (SsoUser)authentication.getPrincipal();
         boolean isAdmin = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN"));
@@ -44,7 +44,7 @@ public class UiController {
         model.addAttribute("userList", userRepo.findAllByOrderByIdAsc());
         model.addAttribute("displayName", user.getDisplayName());
         model.addAttribute("contextPath", servletContext.getContextPath());
-        return "dashboard";
+        return "userDashboard";
     }
 
     @GetMapping("/profile")
@@ -54,7 +54,7 @@ public class UiController {
 
         User savedUser = userRepo.findByUsername(user.getUsername());
         if (savedUser.getAvatar() == null) savedUser.setAvatar(DEFAULT_AVATAR);
-        model.addAttribute("idAdmin", isAdmin);
+        model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("user", userRepo.findByUsername(user.getUsername()));
         model.addAttribute("contextPath", servletContext.getContextPath());
         model.addAttribute("uploadUrl", ssoProperties.isProduction() ? "https://fmning.com/tools/api/images" : "http://localhost:8080/tools/api/images");
