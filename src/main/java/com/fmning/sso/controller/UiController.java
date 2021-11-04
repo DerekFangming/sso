@@ -4,6 +4,7 @@ import com.fmning.sso.SsoProperties;
 import com.fmning.sso.domain.SsoUser;
 import com.fmning.sso.domain.User;
 import com.fmning.sso.dto.VerificationCodeDto;
+import com.fmning.sso.repository.ClientDetailRepo;
 import com.fmning.sso.repository.UserRepo;
 import com.fmning.sso.service.PasswordService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.time.Instant;
 public class UiController {
 
     private final UserRepo userRepo;
+    private final ClientDetailRepo clientDetailRepo;
     private final SsoProperties ssoProperties;
     private final ServletContext servletContext;
     private final PasswordService passwordService;
@@ -45,6 +47,21 @@ public class UiController {
         model.addAttribute("displayName", user.getDisplayName());
         model.addAttribute("contextPath", servletContext.getContextPath());
         return "userDashboard";
+    }
+
+    @GetMapping("/applications")
+    public String applications(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SsoUser user = (SsoUser)authentication.getPrincipal();
+        boolean isAdmin = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ADMIN"));
+        if (!isAdmin) {
+            return "redirect:/profile";
+        }
+
+        model.addAttribute("clientDetailList", clientDetailRepo.findAll());
+        model.addAttribute("displayName", user.getDisplayName());
+        model.addAttribute("contextPath", servletContext.getContextPath());
+        return "applications";
     }
 
     @GetMapping("/profile")
