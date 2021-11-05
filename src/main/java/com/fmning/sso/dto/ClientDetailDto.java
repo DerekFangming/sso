@@ -1,15 +1,15 @@
 package com.fmning.sso.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
-@Builder
 @Data
+@RequiredArgsConstructor
 public class ClientDetailDto {
-    private final String clientId;
-    private final String scope;
-    private final String authorizedGrantTypes;
-    private final String redirectUri;
-    private final Integer accessTokenValiditySeconds;
-    private final Integer refreshTokenValiditySeconds;
+    private String clientId;
+    private String clientSecret;
+    private String authorizedGrantTypes;
+    private String redirectUri;
+    private int accessTokenValiditySeconds;
+    private int refreshTokenValiditySeconds;
 }

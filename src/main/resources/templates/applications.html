@@ -11,12 +11,33 @@
   <script>
       $(document).ready(function() {
         $('.clientDetail').click(function() {
+          $('#clientDetailModalTitle').html('Update application');
+          $('#saveBtn').removeClass('d-none');
+          $('#createBtn').addClass('d-none');
+          $("#clientId").prop('disabled', true);
+
           $('#clientId').val($(this).find('.clientId').html());
           $('#grantTypes').val($(this).find('.authorizedGrantTypes').html());
           $('#redirectUri').val($(this).find('.redirectUri').html());
-          $('#grantTypes').val($(this).find('.authorizedGrantTypes').html());
+          $('#accessTokenValiditySeconds').val($(this).find('.accessTokenValiditySeconds').html());
+          $('#refreshTokenValiditySeconds').val($(this).find('.refreshTokenValiditySeconds').html());
 
-          $('#clientDetailUpdateModal').modal({backdrop: 'static', keyboard: false});
+          $('#clientDetailModal').modal({backdrop: 'static', keyboard: false});
+        });
+
+        $('#createAppBtn').click(function() {
+          $('#clientDetailModalTitle').html('Create application');
+          $('#saveBtn').addClass('d-none');
+          $('#createBtn').removeClass('d-none');
+          $("#clientId").prop('disabled', false);
+
+          $('#clientId').val($(this).find('.clientId').html());
+          $('#grantTypes').val('');
+          $('#redirectUri').val('');
+          $('#accessTokenValiditySeconds').val('');
+          $('#refreshTokenValiditySeconds').val('');
+
+          $('#clientDetailModal').modal({backdrop: 'static', keyboard: false});
         });
 
         $('#saveBtn').click(function() {
@@ -31,7 +52,7 @@
             success: function(data) {
               $('#saveBtn').attr('disabled', false);
               $('#alertMsg').addClass('d-none');
-              $('#clientDetailUpdateModal').modal('hide');
+              $('#clientDetailModal').modal('hide');
             },
             error: function(xhr, textStatus) {
               $('#saveBtn').attr('disabled', false);
@@ -40,6 +61,53 @@
             }
           });
         });
+
+        $('#createBtn').click(function() {
+          $('#alertMsg').addClass('d-none');
+          $(this).attr('disabled', true);
+          $.ajax({
+            url: '[[${contextPath}]]/client-details',
+            type: 'POST',
+            data: JSON.stringify({'clientId': $('#clientId').val().trim(), 'authorizedGrantTypes': $('#grantTypes').val().trim(), 'redirectUri': $('#redirectUri').val().trim(),
+              'accessTokenValiditySeconds': parseInt($('#accessTokenValiditySeconds').val(), 10), 'refreshTokenValiditySeconds': parseInt($('#refreshTokenValiditySeconds').val(), 10)}),
+            contentType: "application/json; charset=utf-8",
+            dataType:'json',
+            success: function(data) {
+              $('#createBtn').attr('disabled', false);
+              $('#alertMsg').addClass('d-none');
+              $('#clientDetailModal').modal('hide');
+
+              $('#resultClientId').val(data.clientId);
+              $('#resultClientSecret').val(data.clientSecret);
+              $('#clientDetailResultModal').modal({backdrop: 'static', keyboard: false});
+            },
+            error: function(xhr, textStatus) {
+              $('#createBtn').attr('disabled', false);
+              $('#alertMsg').html(xhr.responseJSON.message);
+              $('#alertMsg').removeClass('d-none');
+            }
+          });
+        });
+
+        $('#copyClientId').click(function() {
+          copy($('#resultClientId').val())
+        });
+
+        $('#copyClientSecret').click(function() {
+          copy($('#resultClientSecret').val())
+        });
+
+        function copy(text) {
+          navigator.clipboard.writeText(text).then(function() {
+          }, function(err) {
+            alert('Failed to copy to clipboard. Please copy the value manually.');
+          });
+        }
+
+        $('#reloadBtn').click(function() {
+            location.reload();
+        });
+
       });
     </script>
   <style>
@@ -87,7 +155,7 @@
 </nav>
 <div class="container">
   <div class="row mt-3">
-    <div class="col"><button id="createBtn" type="button" class="btn btn-primary float-right">Create Application</button></div>
+    <div class="col"><button id="createAppBtn" type="button" class="btn btn-primary float-right">Create Application</button></div>
   </div>
   <div class="row mt-3">
     <div class="col">
@@ -106,8 +174,8 @@
           <th class="clientId" scope="row" th:text="${clientDetail.clientId}"></th>
           <td class="authorizedGrantTypes"  th:text="${clientDetail.authorizedGrantTypes}"></td>
           <td class="redirectUri" th:text="${clientDetail.redirectUri}"></td>
-          <td th:text="${clientDetail.accessTokenValiditySeconds}"></td>
-          <td th:text="${clientDetail.refreshTokenValiditySeconds}"></td>
+          <td class="accessTokenValiditySeconds" th:text="${clientDetail.accessTokenValiditySeconds}"></td>
+          <td class="refreshTokenValiditySeconds" th:text="${clientDetail.refreshTokenValiditySeconds}"></td>
         </tr>
         </tbody>
       </table>
@@ -115,11 +183,11 @@
   </div>
 </div>
 
-<div class="modal fade" id="clientDetailUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="clientDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Update application</h5>
+        <h5 class="modal-title" id="clientDetailModalTitle">Update application</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -128,18 +196,69 @@
         <div id="alertMsg" class="alert alert-danger mb-3 d-none" role="alert"></div>
         <form>
           <div class="form-group">
+            <label for="clientId">Client ID</label>
+            <input type="text" class="form-control" id="clientId">
+          </div>
+          <div class="form-group">
             <label for="grantTypes">Grant Types</label>
-            <input type="text" class="d-none" id="clientId">
             <input type="text" class="form-control" id="grantTypes">
           </div>
           <div class="form-group">
             <label for="redirectUri">Redirect URLs</label>
             <input type="text" class="form-control" id="redirectUri">
           </div>
+          <div class="form-group">
+            <label for="accessTokenValiditySeconds">Redirect URLs</label>
+            <input type="number" class="form-control" id="accessTokenValiditySeconds">
+          </div>
+          <div class="form-group">
+            <label for="refreshTokenValiditySeconds">Redirect URLs</label>
+            <input type="number" class="form-control" id="refreshTokenValiditySeconds">
+          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button id="saveBtn" type="button" class="btn btn-primary">Save</button>
+        <button id="createBtn" type="button" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="clientDetailResultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Application Credentials</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <p>Here are the credentials for your application. Please save them properly as they will be gone after this window is closed.</p>
+          <div class="form-group">
+            <label>Client ID</label>
+            <div class="input-group">
+              <input id="resultClientId" type="text" class="form-control" disabled>
+              <div class="input-group-append">
+                <button id="copyClientId" class="btn btn-outline-secondary" type="button"><i class="fa fa-clone" aria-hidden="true"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Client Secret</label>
+            <div class="input-group">
+              <input id="resultClientSecret" type="text" class="form-control" disabled>
+              <div class="input-group-append">
+                <button id="copyClientSecret" class="btn btn-outline-secondary" type="button"><i class="fa fa-clone" aria-hidden="true"></i></button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="reloadBtn" type="button" class="btn btn-success">I have saved the credentials</button>
       </div>
     </div>
   </div>
