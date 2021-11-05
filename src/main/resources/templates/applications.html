@@ -44,15 +44,14 @@
           $('#alertMsg').addClass('d-none');
           $(this).attr('disabled', true);
           $.ajax({
-            url: '[[${contextPath}]]/user/roles',
-            type: 'POST',
-            data: JSON.stringify({'id': $('#userId').val().trim(), 'roles': $('#userRoles').val().trim()}),
+            url: '[[${contextPath}]]/client-details/' + $('#clientId').val().trim(),
+            type: 'PUT',
+            data: JSON.stringify({'authorizedGrantTypes': $('#grantTypes').val().trim(), 'redirectUri': $('#redirectUri').val().trim(),
+              'accessTokenValiditySeconds': parseInt($('#accessTokenValiditySeconds').val(), 10), 'refreshTokenValiditySeconds': parseInt($('#refreshTokenValiditySeconds').val(), 10)}),
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
-              $('#saveBtn').attr('disabled', false);
-              $('#alertMsg').addClass('d-none');
-              $('#clientDetailModal').modal('hide');
+              location.reload();
             },
             error: function(xhr, textStatus) {
               $('#saveBtn').attr('disabled', false);
