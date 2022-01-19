@@ -3,9 +3,7 @@ package com.fmning.sso.config;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -33,9 +31,9 @@ public class BeansConfig {
     }
 
     @Bean
-    public HttpClient httpClient() {
-        return HttpClients.custom()
-                .setConnectionManager(new PoolingHttpClientConnectionManager())
+    public OkHttpClient httpClient() {
+        return new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
                 .build();
     }
 }

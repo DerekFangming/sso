@@ -3,10 +3,12 @@ package com.fmning.sso.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fmning.sso.SsoProperties;
 import lombok.RequiredArgsConstructor;
+import okhttp3.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ import java.util.Map;
 public class EmailService {
 
     private final ObjectMapper objectMapper;
-    private final HttpClient httpClient;
+    private final OkHttpClient client;
     private final SsoProperties ssoProperties;
     private final ServletContext servletContext;
 
@@ -72,18 +74,19 @@ public class EmailService {
     }
 
     private void sendEmail(String recipient, String subject, String content) {
-        Map<String, String> payload = new HashMap<>();
+        JSONObject payload = new JSONObject();
         payload.put("to", recipient);
         payload.put("subject", subject);
         payload.put("content", content);
         payload.put("senderType", "SEND_IN_BLUE");
 
         try {
-            HttpPost httppost = new HttpPost("https://www.fmning.com/tools/api/email/send");
-
-            StringEntity requestEntity = new StringEntity(objectMapper.writeValueAsString(payload), ContentType.APPLICATION_JSON);
-            httppost.setEntity(requestEntity);
-            httpClient.execute(httppost);
+            Request request = new Request.Builder()
+                    .url("https://www.fmning.com/tools/api/email/send")
+                    .post(okhttp3.RequestBody.create(payload.toString(), MediaType.parse("application/json; charset=utf-8")))
+                    .build();
+            Call call = client.newCall(request);
+            Response response = call.execute();
         } catch(Exception e) {
             throw new IllegalStateException(e);
         }
