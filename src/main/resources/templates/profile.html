@@ -30,6 +30,9 @@
               success: function(data) {
                 $('#avatar').attr('src', data.url);
                 $('#imageSelectBtn').attr('disabled', false);
+                $("#profileImgSelected").fadeTo(5000, 500).slideUp(500, function(){
+                  $("#profileImgSelected").slideUp(500);
+                });
               },
               error: function(xhr, textStatus) {
                 $('#imageSelectBtn').attr('disabled', false);
@@ -136,6 +139,9 @@
               <div id="profileSuccessAlert" class="alert alert-success" style="display: none;" role="alert">
                 Your profile is successfully updated.
               </div>
+              <div id="profileImgSelected" class="alert alert-warning" style="display: none;"  role="alert">
+                Profile image selected. Click on <b>Save changes</b> button to save it.
+              </div>
               <form>
                 <div class="form-group row">
                   <label class="col-sm-4 col-form-label">Username</label>
@@ -159,7 +165,7 @@
                   <div class="col">
                     <input id="imageSelectInput" type="file" class="d-none" accept="image/*" name="my_file">
                     <button id="updateProfileBtn" type="button" class="btn btn-success pull-right ml-3">Save changes</button>
-                    <button id="imageSelectBtn" type="button" class="btn btn-primary pull-right">Update profile image</button>
+                    <button id="imageSelectBtn" type="button" class="btn btn-primary pull-right">Select profile image</button>
                   </div>
                 </div>
               </form>
