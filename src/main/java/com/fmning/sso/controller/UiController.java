@@ -1,6 +1,7 @@
 package com.fmning.sso.controller;
 
 import com.fmning.sso.SsoProperties;
+import com.fmning.sso.domain.ClientDetail;
 import com.fmning.sso.domain.SsoUser;
 import com.fmning.sso.domain.User;
 import com.fmning.sso.dto.VerificationCodeDto;
@@ -82,10 +83,34 @@ public class UiController {
     public String login(HttpServletRequest request, Model model) {
         model.addAttribute("contextPath", servletContext.getContextPath());
         model.addAttribute("loginUrl", UrlUtils.buildRequestUrl(request));
-        SecurityContext securityContext = SecurityContextHolder.getContext();
         String clientId = request.getParameter("client_id");
+
+        String title = "Fmning";
+        String titleColor = "black";
+        String titleBackgroundColor = "#e3f2fd";
+
+        switch (clientId) {
+            case "yaofeng":
+                title = "Discord";
+                titleColor = "white";
+                titleBackgroundColor = "#343a40";
+                break;
+            case "tools":
+                title = "Tools";
+                titleBackgroundColor = "#f8f9fa";
+                break;
+            case "drive":
+                title = "Share Drive";
+                titleColor = "white";
+                titleBackgroundColor = "#007bff";
+        }
+
+        model.addAttribute("titleText",title);
+        model.addAttribute("titleColor", titleColor);
+        model.addAttribute("titleBackgroundColor", titleBackgroundColor);
         return "login";
     }
+
     @GetMapping("/signup")
     public String register(Model model) {
         model.addAttribute("contextPath", servletContext.getContextPath());
