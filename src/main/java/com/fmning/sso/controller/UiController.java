@@ -89,20 +89,22 @@ public class UiController {
         String titleColor = "black";
         String titleBackgroundColor = "#e3f2fd";
 
-        switch (clientId) {
-            case "yaofeng":
-                title = "Discord";
-                titleColor = "white";
-                titleBackgroundColor = "#343a40";
-                break;
-            case "tools":
-                title = "Tools";
-                titleBackgroundColor = "#f8f9fa";
-                break;
-            case "drive":
-                title = "Share Drive";
-                titleColor = "white";
-                titleBackgroundColor = "#007bff";
+        if (clientId != null) {
+            switch (clientId) {
+                case "yaofeng":
+                    title = "Discord";
+                    titleColor = "white";
+                    titleBackgroundColor = "#343a40";
+                    break;
+                case "tools":
+                    title = "Tools";
+                    titleBackgroundColor = "#f8f9fa";
+                    break;
+                case "drive":
+                    title = "Share Drive";
+                    titleColor = "white";
+                    titleBackgroundColor = "#007bff";
+            }
         }
 
         model.addAttribute("titleText",title);
