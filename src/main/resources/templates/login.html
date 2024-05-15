@@ -30,21 +30,21 @@
         <div class="row justify-content-center my-3">
           <div class="col-md-6 col-sm-12">
             <form th:action="${contextPath} + ${loginUrl}" method="post" name="signup">
-              <div th:switch="${#httpServletRequest.getParameter('prompt')}">
-                <div th:case="'logout'" class="alert alert-success mb-3" role="alert">
-                  You have successfully logged out.
-                </div>
-                <div th:case="'reset'" class="alert alert-success mb-3" role="alert">
-                  You have successfully reset your password.
-                </div>
-                <div th:case="'disabled'" class="alert alert-danger mb-3" role="alert">
-                  Please verify your email address before logging in.
-                </div>
-                <div th:case="null"></div>
-                <div th:case="*" class="alert alert-danger mb-3" role="alert">
-                  Username or password is incorrect. Please try again.
-                </div>
-              </div>
+<!--              <div th:switch="${#request.getParameter('prompt')}">-->
+<!--                <div th:case="'logout'" class="alert alert-success mb-3" role="alert">-->
+<!--                  You have successfully logged out.-->
+<!--                </div>-->
+<!--                <div th:case="'reset'" class="alert alert-success mb-3" role="alert">-->
+<!--                  You have successfully reset your password.-->
+<!--                </div>-->
+<!--                <div th:case="'disabled'" class="alert alert-danger mb-3" role="alert">-->
+<!--                  Please verify your email address before logging in.-->
+<!--                </div>-->
+<!--                <div th:case="null"></div>-->
+<!--                <div th:case="*" class="alert alert-danger mb-3" role="alert">-->
+<!--                  Username or password is incorrect. Please try again.-->
+<!--                </div>-->
+<!--              </div>-->
 
               <div class="form-group my-3">
                 <input type="text" class="form-control" style="height:50px;" id="username" name="username" placeholder="Username (email)">

@@ -5,6 +5,7 @@ import com.fmning.sso.dto.ClientDetailDto;
 import com.fmning.sso.repository.ClientDetailRepo;
 import com.fmning.sso.repository.UserRepo;
 import com.fmning.sso.service.PasswordService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequiredArgsConstructor(onConstructor_={@Autowired})
+@AllArgsConstructor(onConstructor_={@Autowired})
 @RequestMapping("/client-details")
 public class ClientDetailController {
 

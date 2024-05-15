@@ -2,6 +2,7 @@ package com.fmning.sso.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fmning.sso.SsoProperties;
+import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.apache.http.client.HttpClient;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.InternetAddress;
-import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fmning.sso.dto.VerificationCodeDto;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.binary.Base64;
 
-import javax.annotation.PostConstruct;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 public class PasswordService {
 
     private ObjectMapper objectMapper;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void setup() {
@@ -35,11 +35,13 @@ public class PasswordService {
     }
 
     public String encodePassword(String password) {
-        return passwordEncoder.encode(password);
+        return "";
+        //return passwordEncoder.encode(password);
     }
 
     public boolean matchesPassword(String password, String encodedPassword) {
-        return passwordEncoder.matches(password, encodedPassword);
+//        return passwordEncoder.matches(password, encodedPassword);
+        return false;
     }
 
     public String encodeVerificationCode(String username, String code) {
