@@ -8,17 +8,20 @@ import com.fmning.sso.dto.VerificationCodeDto;
 import com.fmning.sso.repository.UserRepo;
 import com.fmning.sso.service.EmailService;
 import com.fmning.sso.service.PasswordService;
+import com.fmning.sso.service.SsoUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.Instant;
@@ -32,9 +35,26 @@ public class UserController {
     private final UserRepo userRepo;
     private final PasswordService passwordService;
     private final EmailService emailService;
+    private final SsoUserDetailsService userDetailsService;
 
-    @RequestMapping("/user")
+    @GetMapping("/user")
     public Principal me(Principal principal) {
+        SecurityContext ctx = SecurityContextHolder.getContext();
+        System.out.println(1);
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
+            return principal;
+        }
+
+        if (principal instanceof JwtAuthenticationToken) {
+            String username = principal.getName();
+
+            SsoUser userDetails = (SsoUser) userDetailsService.loadUserByUsername(username);
+            userDetails.eraseCredentials();
+
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,
+                    null, userDetails.getAuthorities());
+            return token;
+        }
         return principal;
     }
 

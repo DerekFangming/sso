@@ -110,6 +110,11 @@ public class UiController {
         model.addAttribute("titleText",title);
         model.addAttribute("titleColor", titleColor);
         model.addAttribute("titleBackgroundColor", titleBackgroundColor);
+
+        if (request.getParameter("prompt") != null) {
+            model.addAttribute("prompt", request.getParameter("prompt"));
+        }
+
         return "login";
     }
 

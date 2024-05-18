@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit;
 public class PasswordService {
 
     private ObjectMapper objectMapper;
-    //private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void setup() {
@@ -35,13 +35,11 @@ public class PasswordService {
     }
 
     public String encodePassword(String password) {
-        return "";
-        //return passwordEncoder.encode(password);
+        return passwordEncoder.encode(password);
     }
 
     public boolean matchesPassword(String password, String encodedPassword) {
-//        return passwordEncoder.matches(password, encodedPassword);
-        return false;
+        return passwordEncoder.matches(password, encodedPassword);
     }
 
     public String encodeVerificationCode(String username, String code) {

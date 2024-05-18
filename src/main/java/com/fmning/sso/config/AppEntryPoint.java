@@ -16,10 +16,12 @@ public class AppEntryPoint extends LoginUrlAuthenticationEntryPoint {
     @Override
     protected String determineUrlToUseForThisRequest(HttpServletRequest request, HttpServletResponse response,
                                                      AuthenticationException exception) {
+
         String continueParamValue = UrlUtils.buildRequestUrl(request);
         String query = request.getQueryString();
         String redirect = super.determineUrlToUseForThisRequest(request, response, exception);
-        return UriComponentsBuilder.fromPath(redirect).query(query).toUriString();
+        String s = UriComponentsBuilder.fromPath(redirect).query(query).toUriString();
+        return s;
     }
 
 }
