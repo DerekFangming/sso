@@ -3,7 +3,6 @@ package com.fmning.sso.config;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fmning.sso.service.SsoClientDetailsService;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -20,19 +19,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
-import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -50,19 +42,14 @@ public class BeansConfig {
     private final ServletContext servletContext;
     private final AuthenticationManagerBuilder auth;
     private final UserDetailsService userDetailsService;
-    private final SsoClientDetailsService ssoClientDetailsService;
-    private final AuthorizationServerConfig authorizationServerConfig;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     private void init() throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
-    //@Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -85,18 +72,14 @@ public class BeansConfig {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
-//
         http
                 .exceptionHandling((handler)-> handler.authenticationEntryPoint(new AppEntryPoint("/login")))
-
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/login", "/signup", "/logout", "/encode-password/*", //"/verify-email",
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/login", "/signup", "/logout", "/encode-password/*", "/verify-email",
                                 "/favicon.ico", "/reset-password", "/send-recovery-email", "/send-verification-email", "/test", "/oauth/authorize").permitAll()
-                .anyRequest().authenticated()
-                )
-
+                .anyRequest().authenticated())
                 .formLogin((form) -> form.loginPage("/login").permitAll().failureHandler(ssoAuthenticationFailureHandler()))
                 .logout((logout) -> logout.logoutUrl("/logout").permitAll())
-                .csrf((csrf) -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(withDefaults()))
         ;
@@ -120,8 +103,6 @@ public class BeansConfig {
         KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        String a = new String(publicKey.getEncoded(), StandardCharsets.UTF_8);
-        String b = new String(privateKey.getEncoded(), StandardCharsets.UTF_8);
         return new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
                 .keyID(UUID.randomUUID().toString())
