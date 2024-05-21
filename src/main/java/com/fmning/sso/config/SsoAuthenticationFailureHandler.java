@@ -37,6 +37,6 @@ public class SsoAuthenticationFailureHandler implements AuthenticationFailureHan
             continueParamValue = continueParamValue.replace("prompt=" + request.getParameter("prompt"),
                     "prompt=" + prompt);
         }
-        response.sendRedirect(servletContext.getContextPath() + continueParamValue);
+        response.sendRedirect(continueParamValue);
     }
 }

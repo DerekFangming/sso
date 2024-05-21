@@ -94,6 +94,10 @@ public class BeansConfig {
         return new SsoAuthenticationFailureHandler(servletContext);
     }
 
+    /**
+     * Restarting the service would invalidate all tokens. Work is required if multiple containers
+     * are required.
+     */
     @Bean
     public JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException {
         RSAKey rsaKey = generateRsa();

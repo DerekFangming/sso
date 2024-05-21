@@ -52,10 +52,11 @@
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
-              $("#profileSuccessAlert").fadeTo(2000, 500).slideUp(500, function(){
-                $("#profileSuccessAlert").slideUp(500);
+              $('#profileSuccessAlert').fadeTo(2000, 500).slideUp(500, function(){
+                $('#profileSuccessAlert').slideUp(500);
               });
               $('#updateProfileBtn').attr('disabled', false);
+              $('#navbarDisplayName').html($('#displayName').val())
             },
             error: function(xhr, textStatus) {
               $('#updateProfileBtn').attr('disabled', false);
@@ -118,7 +119,7 @@
               <a class="nav-link" href="#">Profile</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#"data-toggle="dropdown" th:text="${user.displayName}"></a>
+              <a id="navbarDisplayName" class="nav-link dropdown-toggle" href="#"data-toggle="dropdown" th:text="${user.displayName}"></a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
               </div>

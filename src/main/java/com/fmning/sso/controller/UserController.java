@@ -148,6 +148,7 @@ public class UserController {
     @PostMapping("/api/user/profile")
     public ResponseEntity<UserDto> updateProfile(@RequestBody UserDto userDto) {
         SsoUser user = (SsoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        user.setDisplayName(userDto.getDisplayName());
         User savedUser = userRepo.findByUsername(user.getUsername());
         savedUser.setDisplayName(userDto.getDisplayName());
 

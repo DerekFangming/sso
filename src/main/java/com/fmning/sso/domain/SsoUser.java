@@ -1,8 +1,10 @@
 package com.fmning.sso.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class SsoUser extends org.springframework.security.core.userdetails.User {
 
     private String displayName;
