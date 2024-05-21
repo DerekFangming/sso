@@ -46,7 +46,7 @@
 
           $('#updateProfileBtn').attr('disabled', true);
           $.ajax({
-            url: '[[${contextPath}]]/user/profile',
+            url: '/api/user/profile',
             type: 'POST',
             data: JSON.stringify({'displayName': $('#displayName').val(), 'avatar': $('#avatar').attr('src')}),
             contentType: "application/json; charset=utf-8",
@@ -77,7 +77,7 @@
           $('#passwordAlert').addClass('d-none');
           $('#passwordResetBtn').attr('disabled', true);
           $.ajax({
-            url: '[[${contextPath}]]/user/password',
+            url: '/api/user/password',
             type: 'POST',
             data: JSON.stringify({'password': $('#password').val(), 'newPassword': $('#newPassword').val()}),
             contentType: "application/json; charset=utf-8",
@@ -102,14 +102,17 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
       <div class="container">
-        <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
+        <a class="navbar-brand" href="/">Fmning</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item" th:if="${isAdmin}">
-              <a class="nav-link" th:href="${contextPath}">User Dashboard</a>
+              <a class="nav-link" href="/">User Dashboard</a>
+            </li>
+            <li class="nav-item" th:if="${isAdmin}">
+              <a class="nav-link" href="/applications">Applications</a>
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="#">Profile</a>

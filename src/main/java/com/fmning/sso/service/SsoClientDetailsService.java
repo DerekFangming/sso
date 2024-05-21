@@ -2,7 +2,6 @@ package com.fmning.sso.service;
 
 import com.fmning.sso.domain.ClientDetail;
 import com.fmning.sso.repository.ClientDetailRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -13,9 +12,8 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Primary
 @Component
@@ -24,25 +22,10 @@ public class SsoClientDetailsService implements RegisteredClientRepository {
     @Autowired
     private ClientDetailRepo clientDetailRepo;
 
-//    @Override
-//    public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-//
-//        ClientDetail clientDetail = clientDetailRepo.findById(clientId)
-//                .orElseThrow(() -> new ClientRegistrationException("client with id " + clientId + " not found"));
-//
-//        BaseClientDetails baseClientDetails = new BaseClientDetails(clientDetail.getClientId(), null, clientDetail.getScope(),
-//                clientDetail.getAuthorizedGrantTypes(), null, clientDetail.getRedirectUri());
-//        baseClientDetails.setClientSecret(clientDetail.getClientSecret());
-//        baseClientDetails.setAccessTokenValiditySeconds(clientDetail.getAccessTokenValiditySeconds());
-//        baseClientDetails.setRefreshTokenValiditySeconds(clientDetail.getRefreshTokenValiditySeconds());
-//        baseClientDetails.setAutoApproveScopes(baseClientDetails.getScope());
-//
-//        return baseClientDetails;
-//    }
-
     @Override
     public void save(RegisteredClient registeredClient) {
         System.out.println("Saving client");
+        throw new IllegalStateException("Saving client is not implemented");
     }
 
     @Override
@@ -56,27 +39,29 @@ public class SsoClientDetailsService implements RegisteredClientRepository {
                 .orElseThrow(() -> new IllegalStateException("Client with id " + clientId + " not found"));
 
         RegisteredClient.Builder registeredClient = RegisteredClient.withId("tools")
-                .clientId("tools")
-//                .clientSecret("be50a6ad-eb14-4555-a52e-4b166a42d497")
-                .clientSecret("$2a$10$Joa58Z6K8wS8oV0CkxkUtuWpi0psMv.DyoEVpFNkhq6MI7Vlo8laO")
+                .clientId(clientDetail.getClientId())
+                .clientSecret(clientDetail.getClientSecret())
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                .redirectUri("http://www.fmning.com/tools/login")
-                .redirectUri("https://www.fmning.com/tools/login")
-                .redirectUri("http://127.0.0.1:8080/tools/login")
-                .redirectUri("http://localhost:8080/tools/login")
-                .redirectUri("http://localhost:8080/tools/oauth2/authorization/tools")
-                .redirectUri("http://localhost:8080/tools/login/oauth2/code/tools")
-                .scope("read")
-                .scope("write")
+                .authorizationGrantTypes(a -> {
+                    a.addAll(splitByComma(clientDetail.getAuthorizedGrantTypes())
+                            .stream().map(AuthorizationGrantType::new).collect(Collectors.toSet()));
+                })
+                .redirectUris(r -> {
+                    r.addAll(splitByComma(clientDetail.getRedirectUri()));
+                })
+                .scopes(s -> {
+                    s.addAll(splitByComma(clientDetail.getScope()));
+                })
                 .tokenSettings(TokenSettings.builder()
                         .accessTokenTimeToLive(Duration.ofSeconds(clientDetail.getAccessTokenValiditySeconds()))
                         .refreshTokenTimeToLive(Duration.ofSeconds(clientDetail.getRefreshTokenValiditySeconds()))
                         .build());
 
         return registeredClient.build();
+    }
+
+    private List<String> splitByComma(String value) {
+        String[] values = value.split(",");
+        return new ArrayList<>(Arrays.asList(values));
     }
 }

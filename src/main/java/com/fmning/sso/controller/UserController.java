@@ -58,7 +58,7 @@ public class UserController {
         return principal;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/api/signup")
     public ResponseEntity<BaseDto> signUp(@RequestBody UserDto userDto) {
 
         if (StringUtils.isBlank(userDto.getDisplayName())) {
@@ -90,7 +90,7 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/send-verification-email")
+    @PostMapping("/api/send-verification-email")
     public ResponseEntity<UserDto> sendVerificationEmail(@RequestBody UserDto userDto) {
         User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
@@ -108,7 +108,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/send-recovery-email")
+    @PostMapping("/api/send-recovery-email")
     public ResponseEntity<UserDto> sendRecoveryEmail(@RequestBody UserDto userDto) {
         User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
@@ -123,7 +123,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping("/api/reset-password")
     public ResponseEntity<UserDto> resetPassword(@RequestBody UserDto userDto) {
         User user = userRepo.findByUsername(userDto.getUsername());
         if (user == null) {
@@ -145,7 +145,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/profile")
+    @PostMapping("/api/user/profile")
     public ResponseEntity<UserDto> updateProfile(@RequestBody UserDto userDto) {
         SsoUser user = (SsoUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User savedUser = userRepo.findByUsername(user.getUsername());
@@ -161,7 +161,7 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/user/password")
+    @PostMapping("/api/user/password")
     public ResponseEntity<UserDto> updatePassword(@RequestBody UserDto userDto) {
         String username = ((SsoUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepo.findByUsername(username);
@@ -179,8 +179,8 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @PostMapping("/user/roles")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/api/user/roles")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDto> updateRoles(@RequestBody UserDto userDto) {
         if (userDto.getId() <= 0) {
             throw new IllegalArgumentException("The user ID is invalid.");

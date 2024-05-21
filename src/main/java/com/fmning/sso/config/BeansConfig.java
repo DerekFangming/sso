@@ -18,6 +18,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,6 +37,7 @@ import java.util.UUID;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableMethodSecurity
 @RequiredArgsConstructor(onConstructor_={@Autowired})
 public class BeansConfig {
 
@@ -74,8 +76,8 @@ public class BeansConfig {
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .exceptionHandling((handler)-> handler.authenticationEntryPoint(new AppEntryPoint("/login")))
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/login", "/signup", "/logout", "/encode-password/*", "/verify-email",
-                                "/favicon.ico", "/reset-password", "/send-recovery-email", "/send-verification-email", "/test", "/oauth/authorize").permitAll()
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/login", "/signup", "/logout", "/encode-password/*", "/verify-email", "/reset-password",
+                                "/favicon.ico", "/api/reset-password", "/api/signup", "/api/send-recovery-email", "/api/send-verification-email", "/test", "/oauth/authorize").permitAll()
                 .anyRequest().authenticated())
                 .formLogin((form) -> form.loginPage("/login").permitAll().failureHandler(ssoAuthenticationFailureHandler()))
                 .logout((logout) -> logout.logoutUrl("/logout").permitAll())

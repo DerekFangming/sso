@@ -3,10 +3,8 @@ package com.fmning.sso.controller;
 import com.fmning.sso.domain.ClientDetail;
 import com.fmning.sso.dto.ClientDetailDto;
 import com.fmning.sso.repository.ClientDetailRepo;
-import com.fmning.sso.repository.UserRepo;
 import com.fmning.sso.service.PasswordService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +16,14 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor(onConstructor_={@Autowired})
-@RequestMapping("/client-details")
+@RequestMapping("/api/client-details")
 public class ClientDetailController {
 
     private final ClientDetailRepo clientDetailRepo;
     private final PasswordService passwordService;
 
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ClientDetailDto> createClientDetail(@RequestBody ClientDetailDto clientDetailDto) {
         if (clientDetailDto.getAccessTokenValiditySeconds() < 60 || clientDetailDto.getRefreshTokenValiditySeconds() < 60) {
             throw new IllegalArgumentException("Token validity time has to be greater than 60 (1 min).");
@@ -57,7 +55,7 @@ public class ClientDetailController {
     }
 
     @PutMapping("/{clientId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ClientDetailDto> updateClientDetail(@PathVariable(value="clientId") String clientId, @RequestBody ClientDetailDto clientDetailDto) {
         if (clientDetailDto.getAccessTokenValiditySeconds() < 60 || clientDetailDto.getRefreshTokenValiditySeconds() < 60) {
             throw new IllegalArgumentException("Token validity time has to be greater than 60 (1 min).");

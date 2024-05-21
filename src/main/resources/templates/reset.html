@@ -13,7 +13,7 @@
         $('#recoveryBtn').click(function() {
           $(this).attr('disabled', true);
           $.ajax({
-            url: '[[${contextPath}]]/send-recovery-email',
+            url: '/api/send-recovery-email',
             type: 'POST',
             data: JSON.stringify({'username': $('#username').val()}),
             contentType: "application/json; charset=utf-8",
@@ -47,13 +47,13 @@
           $(this).attr('disabled', true);
 
           $.ajax({
-            url: '[[${contextPath}]]/reset-password',
+            url: '/api/reset-password',
             type: 'POST',
             data: JSON.stringify({'passwordResetCode': $('#passwordResetCode').val(), 'username': $('#username').val(), 'password': $('#password').val()}),
             contentType: "application/json; charset=utf-8",
             dataType:'json',
             success: function(data) {
-              window.location.href = '[[${contextPath}]]/login?prompt=reset';
+              window.location.href = '/login?prompt=reset';
             },
             error: function(xhr, textStatus) {
               $('#resetBtn').attr('disabled', false);
@@ -69,7 +69,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
       <div class="container">
-        <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
+        <a class="navbar-brand" href="/">Fmning</a>
       </div>
     </nav>
 

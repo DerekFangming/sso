@@ -34,13 +34,13 @@ public class UtilController {
     }
 
     @GetMapping("/ping2")
-    @PreAuthorize("hasRole('SSO')")
+    @PreAuthorize("hasAuthority('SSO')")
     public String ping2() {
         return "ok";
     }
 
     @GetMapping("/ping3")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public String ping3() {
         return "ok";
     }

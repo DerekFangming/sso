@@ -17,7 +17,7 @@
     <body>
       <nav class="navbar navbar-expand-lg navbar-light" th:style="'background-color:' + ${titleBackgroundColor}" style="background-color: #e3f2fd;">
         <div class="container">
-          <a class="navbar-brand" th:href="${contextPath}" th:utext="${titleText}"  th:style="'color:' + ${titleColor}"></a>
+          <a class="navbar-brand" href="/" th:utext="${titleText}"  th:style="'color:' + ${titleColor}"></a>
         </div>
       </nav>
 
@@ -29,7 +29,7 @@
         </div>
         <div class="row justify-content-center my-3">
           <div class="col-md-6 col-sm-12">
-            <form th:action="${contextPath} + ${loginUrl}" method="post" name="signup">
+            <form th:action="${loginUrl}" method="post" name="signup">
               <div th:switch="${prompt}">
                 <div th:case="'logout'" class="alert alert-success mb-3" role="alert">
                   You have successfully logged out.
@@ -61,8 +61,8 @@
                     <div class="dropdown show float-right mt-1">
                       <a class="btn btn-link dropdown-toggle px-0" href="#" role="button" data-toggle="dropdown">Problems signing in?</a>
                       <div class="dropdown-menu">
-                        <a class="dropdown-item" th:href="${contextPath} + '/reset-password'">Reset password</a>
-                        <a class="dropdown-item" th:href="${contextPath} + '/verify-email'">Verify email address</a>
+                        <a class="dropdown-item" href="/reset-password">Reset password</a>
+                        <a class="dropdown-item" href="/verify-email">Verify email address</a>
                       </div>
                     </div>
                   </div>
@@ -75,7 +75,7 @@
         <div class="row justify-content-center my-3">
           <div class="col-md-6 col-sm-12 text-center">
             <span class="py-2 my-2">Don't have an account?</span>
-            <a class="pt-0" th:href="${contextPath} + '/signup'">Sign up</a>
+            <a class="pt-0" href="/signup">Sign up</a>
           </div>
         </div>
       </div>

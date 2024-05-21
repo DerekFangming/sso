@@ -20,7 +20,7 @@
           $('#alertMsg').addClass('d-none');
           $(this).attr('disabled', true);
           $.ajax({
-            url: '[[${contextPath}]]/user/roles',
+            url: '/api/user/roles',
             type: 'POST',
             data: JSON.stringify({'id': $('#userId').val().trim(), 'roles': $('#userRoles').val().trim()}),
             contentType: "application/json; charset=utf-8",
@@ -43,7 +43,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
       <div class="container">
-        <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
+        <a class="navbar-brand" href="/">Fmning</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -53,10 +53,10 @@
               <a class="nav-link" href="#">User Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" th:href="${contextPath} + '/applications'">Applications</a>
+              <a class="nav-link" href="/applications">Applications</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" th:href="${contextPath} + '/profile'">Profile</a>
+              <a class="nav-link" href="/profile">Profile</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#"data-toggle="dropdown" th:text="${displayName}"></a>

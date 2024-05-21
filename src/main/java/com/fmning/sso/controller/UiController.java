@@ -46,7 +46,6 @@ public class UiController {
 
         model.addAttribute("userList", userRepo.findAllByOrderByIdAsc());
         model.addAttribute("displayName", user.getDisplayName());
-        model.addAttribute("contextPath", servletContext.getContextPath());
         return "userDashboard";
     }
 
@@ -61,7 +60,6 @@ public class UiController {
 
         model.addAttribute("clientDetailList", clientDetailRepo.findAll());
         model.addAttribute("displayName", user.getDisplayName());
-        model.addAttribute("contextPath", servletContext.getContextPath());
         return "applications";
     }
 
@@ -74,14 +72,12 @@ public class UiController {
         if (savedUser.getAvatar() == null) savedUser.setAvatar(DEFAULT_AVATAR);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("user", userRepo.findByUsername(user.getUsername()));
-        model.addAttribute("contextPath", servletContext.getContextPath());
         model.addAttribute("uploadUrl", ssoProperties.isProduction() ? "https://fmning.com/tools/api/images" : "http://localhost:8080/tools/api/images");
         return "profile";
     }
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, Model model) {
-        model.addAttribute("contextPath", servletContext.getContextPath());
         model.addAttribute("loginUrl", UrlUtils.buildRequestUrl(request));
         String clientId = request.getParameter("client_id");
 
@@ -120,13 +116,11 @@ public class UiController {
 
     @GetMapping("/signup")
     public String register(Model model) {
-        model.addAttribute("contextPath", servletContext.getContextPath());
         return "signup";
     }
 
     @GetMapping("/verify-email")
     public String verifyEmail(@RequestParam(name = "code", required = false) String code, Model model) {
-        model.addAttribute("contextPath", servletContext.getContextPath());
         if (code == null) {
             return "verify";
         } else {
@@ -155,7 +149,6 @@ public class UiController {
 
     @GetMapping("/reset-password")
     public String resetPassword(Model model) {
-        model.addAttribute("contextPath", servletContext.getContextPath());
         return "reset";
     }
 

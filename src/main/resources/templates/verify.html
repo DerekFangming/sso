@@ -16,7 +16,7 @@
           $(this).attr('disabled', true);
 
           $.ajax({
-            url: '[[${contextPath}]]/send-verification-email',
+            url: '/api/send-verification-email',
             type: 'POST',
             data: JSON.stringify({'username': $('#username').val().trim()}),
             contentType: "application/json; charset=utf-8",
@@ -46,7 +46,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <div class="container">
-    <a class="navbar-brand" th:href="${contextPath}">Fmning</a>
+    <a class="navbar-brand" href="/">Fmning</a>
   </div>
 </nav>
 
@@ -64,7 +64,7 @@
     </div>
     <div class="row">
       <div class="col text-center mt-4">
-        <a class="btn btn-primary" th:href="${contextPath}" role="button">Go to log in page</a>
+        <a class="btn btn-primary" href="/" role="button">Go to log in page</a>
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@
     </div>
     <div class="row">
       <div class="col text-center mt-4">
-        <a class="btn btn-primary" th:href="${contextPath}" role="button">Resend verification email from login page</a>
+        <a class="btn btn-primary" href="/" role="button">Resend verification email from login page</a>
       </div>
     </div>
   </div>
@@ -120,7 +120,7 @@
         before you are able to login. The link will be valid for 24 hours.
       </div>
       <div class="modal-footer">
-        <a type="button" class="btn btn-primary" th:href="${contextPath}">Go to login</a>
+        <a type="button" class="btn btn-primary" href="/">Go to login</a>
       </div>
     </div>
   </div>
