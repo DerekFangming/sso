@@ -13,12 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor(onConstructor_={@Autowired})
 public class UtilController {
 
-    //private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/encode-password/{password}")
     public String encodePassword(@PathVariable("password") String password) {
-//         return passwordEncoder.encode(password);
-         return "";
+         return passwordEncoder.encode(password);
     }
 
     @GetMapping("/ping1")
