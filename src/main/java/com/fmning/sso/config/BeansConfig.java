@@ -77,7 +77,7 @@ public class BeansConfig {
         http
                 .exceptionHandling((handler)-> handler.authenticationEntryPoint(new AppEntryPoint("/login")))
                 .authorizeHttpRequests((requests) -> requests.requestMatchers("/login", "/signup", "/logout", "/encode-password/*", "/verify-email", "/reset-password",
-                                "/favicon.ico", "/api/reset-password", "/api/signup", "/api/send-recovery-email", "/api/send-verification-email", "/test", "/oauth/authorize").permitAll()
+                                "/favicon.ico", "/api/reset-password", "/api/signup", "/api/send-recovery-email", "/api/send-verification-email", "/test").permitAll()
                 .anyRequest().authenticated())
                 .formLogin((form) -> form.loginPage("/login").permitAll().failureHandler(ssoAuthenticationFailureHandler()))
                 .logout((logout) -> logout.logoutUrl("/logout").permitAll())
