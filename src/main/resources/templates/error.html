@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container">
+        <a class="navbar-brand" href="/">Fmning</a>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row my-4">
+        <div class="col text-center mt-4">
+          <p class="lead">Something went wrong</p>
+        </div>
+      </div>
+
+      <div class="row justify-content-center my-3">
+        <div class="col-md-6 col-sm-12">
+          <div class="alert alert-danger mb-3" role="alert" th:text="${errorMessage}"></div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center my-3">
+        <div class="col-md-6 col-sm-12">
+          <a type="button" class="btn btn-primary btn-block my-4" href="/">Go Back to Home Page</a>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

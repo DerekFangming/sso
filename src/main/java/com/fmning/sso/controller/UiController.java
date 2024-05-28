@@ -7,23 +7,26 @@ import com.fmning.sso.dto.VerificationCodeDto;
 import com.fmning.sso.repository.ClientDetailRepo;
 import com.fmning.sso.repository.UserRepo;
 import com.fmning.sso.service.PasswordService;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Instant;
 
 @Controller
 @RequiredArgsConstructor(onConstructor_={@Autowired})
-public class UiController {
+public class UiController implements ErrorController {
 
     private final UserRepo userRepo;
     private final ClientDetailRepo clientDetailRepo;
@@ -148,6 +151,30 @@ public class UiController {
     @GetMapping("/reset-password")
     public String resetPassword(Model model) {
         return "reset";
+    }
+
+    @GetMapping("/fake-error")
+    public String fakeErr(Model model) {
+        throw new IllegalStateException("wrong");
+    }
+
+    @RequestMapping("/error")
+    public String handleError(HttpServletRequest request, Model model) {
+        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        Object message = request.getAttribute(RequestDispatcher.ERROR_MESSAGE);
+
+        String errorMessage = "Internal error";
+
+        if (message != null) {
+            errorMessage = "";
+            if (status != null) {
+                errorMessage = status + ": ";
+            }
+
+            errorMessage += message;
+        }
+        model.addAttribute("errorMessage", errorMessage);
+        return "error";
     }
 
 }
