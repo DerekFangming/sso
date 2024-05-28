@@ -72,7 +72,7 @@ public class BeansConfig {
     }
 
     @Bean
-    @Order(Ordered.HIGHEST_PRECEDENCE)
+    @Order(Ordered.HIGHEST_PRECEDENCE + 1)
     public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .exceptionHandling((handler)-> handler.authenticationEntryPoint(new AppEntryPoint("/login")))
