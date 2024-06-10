@@ -1,3 +1,4 @@
+# Stage build
 FROM openjdk:17-alpine AS builder
 
 WORKDIR /app
@@ -5,7 +6,7 @@ COPY . .
 
 RUN ./gradlew bootJar
 
-
+# Stage run
 FROM openjdk:17-alpine
 
 WORKDIR /app
