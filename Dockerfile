@@ -12,6 +12,6 @@ FROM openjdk:17-alpine
 WORKDIR /app
 COPY --from=builder /app/build/libs .
 
-ENV PRODUCTION=false
+ENV PRODUCTION=true
 
 CMD ["java", "-jar", "sso.jar"]
