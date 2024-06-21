@@ -41,7 +41,7 @@ public class ClientDetailController {
         ClientDetail clientDetail = ClientDetail.builder()
                 .clientId(clientDetailDto.getClientId())
                 .clientSecret(passwordService.encodePassword(clientSecret))
-                .scope("read,write")
+                .scope("ADMIN")// TODO
                 .authorizedGrantTypes(clientDetailDto.getAuthorizedGrantTypes())
                 .redirectUri(clientDetailDto.getRedirectUri())
                 .accessTokenValiditySeconds(clientDetailDto.getAccessTokenValiditySeconds())

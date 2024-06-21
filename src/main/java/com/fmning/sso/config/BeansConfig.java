@@ -23,6 +23,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -83,10 +85,21 @@ public class BeansConfig {
                 .logout((logout) -> logout.logoutUrl("/logout").permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
-                .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(withDefaults()))
+                .oauth2ResourceServer((resourceServer) -> resourceServer.jwt((jwt) ->
+                        jwt.jwtAuthenticationConverter(jwtConverter())))
         ;
 
         return http.build();
+    }
+
+    private JwtAuthenticationConverter jwtConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+//        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities"); // default is: scope, scp
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return converter;
     }
 
     @Bean

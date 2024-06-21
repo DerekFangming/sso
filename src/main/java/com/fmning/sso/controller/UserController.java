@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.Instant;
+import java.util.Collection;
 
 import static com.fmning.sso.controller.UiController.DEFAULT_AVATAR;
 
@@ -40,12 +42,8 @@ public class UserController {
     @GetMapping("/user")
     public Principal me(Principal principal) {
         SecurityContext ctx = SecurityContextHolder.getContext();
-        System.out.println(1);
         if (principal instanceof UsernamePasswordAuthenticationToken) {
-            return principal;
-        }
-
-        if (principal instanceof JwtAuthenticationToken) {
+            System.out.println("Getting user with UsernamePasswordAuthenticationToken");
             String username = principal.getName();
 
             SsoUser userDetails = (SsoUser) userDetailsService.loadUserByUsername(username);
@@ -55,7 +53,39 @@ public class UserController {
                     null, userDetails.getAuthorities());
             return token;
         }
+
+        if (principal instanceof JwtAuthenticationToken) {
+            String tokenValue = ((JwtAuthenticationToken) principal).getToken().getTokenValue();
+            System.out.println("Getting user with JwtAuthenticationToken: " + tokenValue);
+        } else {
+            System.out.println("Getting user with " + principal.getName());
+        }
+
+//        if (principal instanceof JwtAuthenticationToken) {
+//            String username = principal.getName();
+//
+//            Collection<GrantedAuthority> authrities = ((JwtAuthenticationToken) principal).getAuthorities();
+//
+//            SsoUser userDetails = (SsoUser) userDetailsService.loadUserByUsername(username);
+//            userDetails.eraseCredentials();
+//
+//            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,
+//                    null, userDetails.getAuthorities());
+//            return token;
+//        }
         return principal;
+    }
+
+    @GetMapping("/user1")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void me1() {
+
+    }
+
+    @GetMapping("/user2")
+    @PreAuthorize("hasAuthority('HAHA')")
+    public void me2() {
+
     }
 
     @PostMapping("/api/signup")
