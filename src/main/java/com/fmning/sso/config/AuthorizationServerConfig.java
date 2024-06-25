@@ -60,6 +60,7 @@ public class AuthorizationServerConfig {
         return AuthorizationServerSettings.builder()
                 .authorizationEndpoint("/oauth/authorize")
                 .tokenEndpoint("/oauth/token")
+                .jwkSetEndpoint("/oauth/jwk")
                 .build();
     }
 
