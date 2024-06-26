@@ -42,37 +42,6 @@ public class UserController {
     @GetMapping("/user")
     public Principal me(Principal principal) {
         SecurityContext ctx = SecurityContextHolder.getContext();
-        if (principal instanceof UsernamePasswordAuthenticationToken) {
-            System.out.println("Getting user with UsernamePasswordAuthenticationToken");
-            String username = principal.getName();
-
-            SsoUser userDetails = (SsoUser) userDetailsService.loadUserByUsername(username);
-            userDetails.eraseCredentials();
-
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,
-                    null, userDetails.getAuthorities());
-            return token;
-        }
-
-        if (principal instanceof JwtAuthenticationToken) {
-            String tokenValue = ((JwtAuthenticationToken) principal).getToken().getTokenValue();
-            System.out.println("Getting user with JwtAuthenticationToken: " + tokenValue);
-        } else {
-            System.out.println("Getting user with " + principal.getName());
-        }
-
-//        if (principal instanceof JwtAuthenticationToken) {
-//            String username = principal.getName();
-//
-//            Collection<GrantedAuthority> authrities = ((JwtAuthenticationToken) principal).getAuthorities();
-//
-//            SsoUser userDetails = (SsoUser) userDetailsService.loadUserByUsername(username);
-//            userDetails.eraseCredentials();
-//
-//            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,
-//                    null, userDetails.getAuthorities());
-//            return token;
-//        }
         return principal;
     }
 
