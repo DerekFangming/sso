@@ -1,7 +1,6 @@
 package com.fmning.sso.config;
 
 import com.fmning.sso.service.SsoClientDetailsService;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,6 @@ import org.springframework.security.oauth2.server.authorization.token.JwtEncodin
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,12 +66,10 @@ public class AuthorizationServerConfig {
     public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
         return context -> {
             if (context.getPrincipal() instanceof OAuth2ClientAuthenticationToken) {
-//                System.out.println("Customizing token");
                 context.getClaims().claim("scp", context.getRegisteredClient().getScopes());
             }
 
             if (context.getPrincipal() instanceof UsernamePasswordAuthenticationToken) {
-//                System.out.println(1);
                 List<String> authorities = context.getPrincipal().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
                 context.getClaims().claim("scp", authorities);
             }

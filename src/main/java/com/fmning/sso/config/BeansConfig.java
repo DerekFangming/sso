@@ -95,7 +95,6 @@ public class BeansConfig {
 
     private JwtAuthenticationConverter jwtConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-//        jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities"); // default is: scope, scp
         jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();

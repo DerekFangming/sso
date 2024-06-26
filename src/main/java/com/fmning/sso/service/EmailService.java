@@ -42,7 +42,7 @@ public class EmailService {
         StringBuilder sb = new StringBuilder();
         sb.append("Hello ").append(displayName).append(",\n")
                 .append("Here is the link to confirm your email address. This link will expire in 24 hours.\n\n")
-                .append(ssoProperties.isProduction() ?  "https://sso.fmning.com/" : "http://localhost:8081/")
+                .append(ssoProperties.isProduction() ?  "https://sso.fmning.com/" : "http://localhost:9100/")
                 .append("verify-email?code=")
                 .append(confirmToken)
                 .append("\n\n")
