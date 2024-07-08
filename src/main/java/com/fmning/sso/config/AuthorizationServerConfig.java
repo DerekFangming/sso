@@ -65,10 +65,12 @@ public class AuthorizationServerConfig {
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> tokenCustomizer() {
         return context -> {
+            // For tokens generated with oauth client
             if (context.getPrincipal() instanceof OAuth2ClientAuthenticationToken) {
                 context.getClaims().claim("scp", context.getRegisteredClient().getScopes());
             }
 
+            // For tokens generated with username password login
             if (context.getPrincipal() instanceof UsernamePasswordAuthenticationToken) {
                 List<String> authorities = context.getPrincipal().getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
                 context.getClaims().claim("scp", authorities);

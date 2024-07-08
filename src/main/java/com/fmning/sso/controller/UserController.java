@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +41,18 @@ public class UserController {
     private final SsoUserDetailsService userDetailsService;
 
     @GetMapping("/user")
-    public Principal me(Principal principal) {
+    public Object me(Principal principal) {
         SecurityContext ctx = SecurityContextHolder.getContext();
+
+        if (principal instanceof JwtAuthenticationToken) {
+            User user = userRepo.findByUsername(principal.getName());
+            if (user != null) {
+                SsoUser ssoUser = new SsoUser(user);
+                ssoUser.eraseCredentials();
+                return ssoUser;
+            }
+        }
+
         return principal;
     }
 
