@@ -46,8 +46,7 @@ public class EmailService {
                 .append("verify-email?code=")
                 .append(confirmToken)
                 .append("\n\n")
-                .append("Thank you,\n")
-                .append("Support team");
+                .append("Thank you\n");
 
         if (ssoProperties.isProduction()) {
             sendEmail(username, "Confirm your account", sb.toString());
@@ -81,7 +80,7 @@ public class EmailService {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://www.fmning.com/tools/api/email/send")
+                    .url("https://tools.fmning.com/api/email/send")
                     .post(okhttp3.RequestBody.create(payload.toString(), MediaType.parse("application/json; charset=utf-8")))
                     .build();
             Call call = client.newCall(request);

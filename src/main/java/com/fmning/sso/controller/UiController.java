@@ -73,7 +73,7 @@ public class UiController implements ErrorController {
         if (savedUser.getAvatar() == null) savedUser.setAvatar(DEFAULT_AVATAR);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("user", userRepo.findByUsername(user.getUsername()));
-        model.addAttribute("uploadUrl", ssoProperties.isProduction() ? "https://fmning.com/tools/api/images" : "http://localhost:9101/tools/api/images");// TODO
+        model.addAttribute("uploadUrl", ssoProperties.isProduction() ? "https://tools.fmning.com/api/images" : "http://localhost:9101/api/images");
         return "profile";
     }
 
