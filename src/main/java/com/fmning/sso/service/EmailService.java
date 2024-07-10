@@ -61,8 +61,7 @@ public class EmailService {
                 .append("Here is the verification code to reset your password. This code will expire in 24 hours.\n\n")
                 .append(resetCode)
                 .append("\n\n")
-                .append("Thank you,\n")
-                .append("Support team");
+                .append("Thank you\n");
 
         if (ssoProperties.isProduction()) {
             sendEmail(username, "Account reset code", sb.toString());
